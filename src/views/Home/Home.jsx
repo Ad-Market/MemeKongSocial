@@ -1,5 +1,5 @@
 import { useDispatch,useSelector } from "react-redux";
-import { Paper, Grid, Typography, Box, Zoom,Button, SvgIcon } from "@material-ui/core";
+import { Paper, Grid, Typography, Box, Zoom,Button, SvgIcon, useMediaQuery, Container } from "@material-ui/core";
 import { formatCurrency, getDisplayBalance, trim } from "../../helpers";
 import {useEffect,useCallback, useMemo} from 'react'
 import { useWeb3Context } from "src/hooks/web3Context";
@@ -35,14 +35,49 @@ function Home() {
   const [isConnected, setConnected] = useState(connected);
   const [anchorEl, setAnchorEl] = useState(null);
   const [delayShow,setDelayShow] = useState(false)
+  const smallerScreen = useMediaQuery("(max-width: 650px)");
+  const verySmallScreen = useMediaQuery("(max-width: 379px)");
 
-  return <div id="home_tarzan" className="home_gd">
+  return <div id="home_tarzan">
     <div className="boodyBox fxColumn">
       <img src={Bg} alt="" className="bg" />
     </div>
-    
-      <img src={gorila} withd="200px" height="200px"/>
-    
+    <img src={gorila} withd="200px" height="200px" style={{position: "fixed", bottom: "0px", left:"0%" }}/>
+    <Container
+        style={{
+          paddingLeft: smallerScreen || verySmallScreen ? "0" : "0.3rem",
+          paddingRight: smallerScreen || verySmallScreen ? "0" : "0.3rem",
+          maxWidth:"70%",
+        }}
+      >
+      <div style={{display:"flex", justifyContent:"center", marginTop: "50px"}}>
+        <Typography variant="h1">
+          JOIN OUR
+        </Typography>
+      </div>
+      <div style={{display:"flex", justifyContent:"center", marginTop: "40px", marginBottom:"30px"}}>
+        <Typography style={{color: "#965E96", fontSize:"120px", lineHeight:"1.1", fontWeight:"600"}}>
+          GORILLA GANG
+        </Typography>
+      </div>
+      <Grid container spacing={3} className="data-grid">
+        <Grid item lg={6} md={12} sm={12} xs={12}>
+          <Typography variant="h3" style={{fontSize:"25px", fontWeight:"300"}}>
+            Community powers and propels Meme Kong. Learn more about the difference and become part of our Gorilla Gang.
+          </Typography>
+        </Grid>
+        <Grid item lg={6} md={12} sm={12} xs={12}>
+          <Typography variant="h4" color="textSecondary">
+            {/* Meme Kong Price */}
+          </Typography>
+        </Grid>
+      </Grid>
+      <div style={{marginTop: "50px"}}>
+        <iframe loading="lazy" src="https://app.uniswap.org/#/swap?theme=dark&use=v1?outputCurrency=" style={{border:"0px", margin:"0px auto", display:"block", borderRadius:"20px", maxWidth:"600px"}}
+        id="myId" width="100%" height="600px">
+        </iframe>
+      </div>
+    </Container>
   </div>
 }
 

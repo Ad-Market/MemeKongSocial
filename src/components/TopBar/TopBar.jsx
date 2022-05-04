@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     },
     justifyContent: "flex-end",
     alignItems: "flex-end",
-    background: "transparent",
+    background: "black",
     backdropFilter: "none",
     zIndex: 10,
   },
@@ -91,6 +91,19 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Link
             component={NavLink}
+            id="home-nav"
+            to="/home"
+            isActive={(match, location) => {
+              return checkPage(match, location, "home");
+            }}
+          // className={`button-dapp-menu ${isActive ? "active" : ""}`}
+          >
+            <Typography variant="h3" className={classes.buttonProp}>
+              Home
+            </Typography>
+          </Link>
+          <Link
+            component={NavLink}
             id="dash-nav"
             to="/dashboard"
             isActive={(match, location) => {
@@ -99,7 +112,7 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
             className={`button-dapp-menu ${isActive ? "active" : ""}`}
           >
             <Typography variant="h3" className={classes.buttonProp} >
-              Dashboard
+              Social
             </Typography>
           </Link>
 
@@ -113,20 +126,20 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
           // className={`button-dapp-menu ${isActive ? "active" : ""}`}
           >
             <Typography variant="h3" className={classes.buttonProp}>
-              Staking
+              Wallet
             </Typography>
           </Link>
           <Link
             component={NavLink}
-            id="home-nav"
-            to="/home"
+            id="stake-nav"
+            to="/stake"
             isActive={(match, location) => {
-              return checkPage(match, location, "home");
+              return checkPage(match, location, "stake");
             }}
           // className={`button-dapp-menu ${isActive ? "active" : ""}`}
           >
             <Typography variant="h3" className={classes.buttonProp}>
-              Home
+              Setting
             </Typography>
           </Link>
         </div>
