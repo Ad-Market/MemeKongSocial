@@ -222,7 +222,7 @@ function App() {
                 <Stake />
               </Route>
               <Route path="/state">
-                <Stake />
+                <Dashboard />
               </Route>
               <Route path="/wallet">
                 <Stake />

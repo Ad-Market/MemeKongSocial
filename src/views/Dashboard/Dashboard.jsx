@@ -3,6 +3,8 @@ import { Paper, Grid, Typography, Box, Zoom } from "@material-ui/core";
 import { trim } from "../../helpers";
 import "./dashboard.scss";
 import { Skeleton } from "@material-ui/lab";
+import React from "react";
+import TradingViewWidget, {Themes} from "react-tradingview-widget";
 
 function Dashboard() {
   // Use marketPrice as indicator of loading.
@@ -20,9 +22,27 @@ function Dashboard() {
     return state.app.marketCap;
   });
 
+  // const BSCChart =() =>{
+
+  //   return (
+  //   <>
+  //     <TradingViewWidget
+  //     symbol={"AAPL"}
+  //     theme={Themes.DARK}
+  //     interval="D"
+  //     locale="en"
+  //     timezone="America/New York"
+  //     hideSideToolbar={false}
+  //     details
+  //     news={["headlines"]}
+  //   />
+  //   </>
+  //   );
+  // };
+
   return (
     <div id="dashboard-view">
-      <Grid container spacing={1} className="top-row-data">
+      {/* <Grid container spacing={1} className="top-row-data">
         <Grid item lg={4} md={4} sm={3} xs={5} className="olympus-card">
           <Zoom in={true}>
             <Paper className="ohm-card">
@@ -76,7 +96,17 @@ function Dashboard() {
             </Paper>
           </Zoom>
         </Grid>
-      </Grid>
+      </Grid> */}
+        <TradingViewWidget
+        symbol={"ETHUSDT / WETHMKONG"}
+        theme={Themes.DARK}
+        interval="D"
+        locale="en"
+        timezone="America/New York"
+        hideSideToolbar={false}
+        details
+        news={["headlines"]}
+      />
 
       {/* <Box className="main-data-area">
         <Grid container spacing={2} className="data-grid">
