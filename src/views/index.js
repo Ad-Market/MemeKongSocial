@@ -5,4 +5,4 @@ export { default as Wallet } from "./Wallet/Wallet";
 export { default as Dashboard } from "./Dashboard/Dashboard";
 export { default as Presale } from "./Presale/Presale";
 export { default as Swap } from "./Swap/Swap";
-export { default as TreasuryDashboard } from "./TreasuryDashboard/TreasuryDashboard";
+export { default as Social } from "./Social/Social";

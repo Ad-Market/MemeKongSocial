@@ -16,7 +16,7 @@ import { calcBondDetails } from "./slices/BondSlice";
 import { loadAppDetails } from "./slices/AppSlice";
 import { loadAccountDetails, calculateUserBondDetails } from "./slices/AccountSlice";
 
-import { Home, Wallet, Dashboard, TreasuryDashboard, Presale, Swap } from "./views";
+import { Home, Wallet, Dashboard, Social, Presale, Swap } from "./views";
 import TopBar from "./components/TopBar/TopBar.jsx";
 import NavDrawer from "./components/Sidebar/NavDrawer.jsx";
 import LoadingSplash from "./components/Loading/LoadingSplash";
@@ -216,7 +216,7 @@ function App() {
           <div id="app_page" className={`${path === "/" ? null : classes.content} ${isSmallerScreen && classes.contentShift}`} style={{ position: 'relative', background: "#2C1349" }}>
             <Switch>
               <Route exact path="/social">
-                <TreasuryDashboard />
+                <Social />
               </Route>
               <Route path="/state">
                 <Dashboard />
