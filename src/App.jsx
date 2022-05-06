@@ -213,7 +213,7 @@ function App() {
             </nav>
           )}
 
-          <div id="app_page" className={`${path === "/" ? null : classes.content} ${isSmallerScreen && classes.contentShift}`} style={{ position: 'relative', background: "#2C1349" }}>
+          <div id="app_page" className={`${path === "/" ? null : classes.content} ${isSmallerScreen && classes.contentShift}`} style={{ position: 'relative', background: "#2C1349", padding:"0px" }}>
             <Switch>
               <Route exact path="/dashboard">
                 <TreasuryDashboard />

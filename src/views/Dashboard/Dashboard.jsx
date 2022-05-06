@@ -3,13 +3,21 @@ import { Paper, Grid, Typography, Box, Zoom } from "@material-ui/core";
 import { trim } from "../../helpers";
 import "./dashboard.scss";
 import { Skeleton } from "@material-ui/lab";
-import React from "react";
-import TradingViewWidget, {Themes} from "react-tradingview-widget";
+import React, { useEffect, useState } from "react";
+import Axios from "axios";
+import TradingViewWidget, { Themes } from "react-tradingview-widget";
+import {Container, Row, Col, Table} from 'react-bootstrap';
+import logo from "../../assets/MemeKongLogo.png";
+import {Button, TextField} from "@material-ui/core";
 
 function Dashboard() {
   // Use marketPrice as indicator of loading.
+  const [search, setSearch] = useState("");
+  const [crypto, setCrypto] = useState([]);
+
   const isAppLoading = useSelector(state => !state.app?.marketPrice ?? true);
   const marketPrice = useSelector(state => {
+    localStorage.setItem('rememberMe', 'QQQ');
     return state.app.marketPrice;
   });
   const circSupply = useSelector(state => {
@@ -22,184 +30,132 @@ function Dashboard() {
     return state.app.marketCap;
   });
 
-  // const BSCChart =() =>{
-
-  //   return (
-  //   <>
-  //     <TradingViewWidget
-  //     symbol={"AAPL"}
-  //     theme={Themes.DARK}
-  //     interval="D"
-  //     locale="en"
-  //     timezone="America/New York"
-  //     hideSideToolbar={false}
-  //     details
-  //     news={["headlines"]}
-  //   />
-  //   </>
-  //   );
-  // };
+  useEffect(() => {
+    Axios.get(
+      `https://api.coinstats.app/public/v1/coins?skip=0&limit=100&cy=INR`
+    ).then((res) => {
+      setCrypto(res.data.coins);
+    });
+  }, []);
 
   return (
+  <div>
     <div id="dashboard-view">
-      {/* <Grid container spacing={1} className="top-row-data">
-        <Grid item lg={4} md={4} sm={3} xs={5} className="olympus-card">
-          <Zoom in={true}>
-            <Paper className="ohm-card">
-              <Typography variant="h6">Price</Typography>
-              <Typography variant="h5">
-                {isAppLoading ? <Skeleton width="100px" /> : `$${trim(marketPrice, 2)}`}
-              </Typography>
-            </Paper>
-          </Zoom>
+      <Grid container direction="row"  spacing={2}>
+        <Grid item xs={12} sm={6} md={6} lg={6}>
+          <TradingViewWidget
+            symbol={"ETHUSDT / WETHMKONG"}
+            theme={Themes.LIGHT}
+            interval="D"
+            locale="en"
+            timezone="America/New York"
+            hideSideToolbar={true}
+            hide_top_toolbar={true}
+            news={["headlines"]}
+            width="90%"
+            height="500"
+          />
         </Grid>
-
-        <Grid item lg={4} md={4} sm={4} xs={7}>
-          <Zoom in={true}>
-            <Paper className="ohm-card">
-              <Typography variant="h6">Market Cap</Typography>
-              <Typography variant="h5">
-                {isAppLoading ? (
-                  <Skeleton width="160px" />
-                ) : (
-                  new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    maximumFractionDigits: 0,
-                    minimumFractionDigits: 0,
-                  }).format(marketCap)
-                )}
-              </Typography>
-            </Paper>
-          </Zoom>
+        <Grid item xs={12} sm={6} md={6} lg={6}>
+          <div style={{display:"flex", justifyContent:"center", marginTop: "40px", marginBottom:"30px"}}>
+            <Typography style={{color: "#965E96", fontSize:"100px", lineHeight:"1.1", fontWeight:"600"}}>
+              $MEME KONG
+            </Typography>
+          </div>
+          <div>
+            <Typography style={{fontSize:"25px", lineHeight:"1.2"}}>
+            Meme Kong is redefining expectations and setting new standards where none existed. 
+            we are promoting it based on shared experience and strength in numbers. 
+            Meme Kong is community and utility in the first hybrid token.
+            </Typography>
+            <div style={{border:"1px solid white", borderRadius:"15px", padding:"30px", margin:"40px", fontSize:"40px", lineHeight:"1.0", textAlign:"center"}}>
+              <Row>
+                <Col style={{}}>
+                  Price : AAA
+                </Col>
+                <Col>
+                  24hr % : AAA
+                </Col>
+                <Col>
+                  Volume : AAA
+                </Col>
+              </Row>
+              {/* <Typography style={{fontSize:"40px", lineHeight:"1.0"}}>Token Price : AAA</Typography>
+              <Typography style={{fontSize:"40px", lineHeight:"1.0"}}>Token Price : BBB</Typography>
+              <Typography style={{fontSize:"40px", lineHeight:"1.0"}}>Token Price : CCC</Typography> */}
+            </div>
+          </div>
         </Grid>
+      </Grid>
 
-        <Grid item lg={4} md={4} sm={5} xs={12}>
-          <Zoom in={true}>
-            <Paper className="ohm-card">
-              <Typography variant="h6">Supply (circulating/total)</Typography>
-              <Typography variant="h5">
-                {isAppLoading ? (
-                  <Skeleton width="250px" />
-                ) : (
-                  `${new Intl.NumberFormat("en-US", {
-                    maximumFractionDigits: 0,
-                    minimumFractionDigits: 0,
-                  }).format(circSupply)}
-                    /
-                    ${new Intl.NumberFormat("en-US", {
-                      maximumFractionDigits: 0,
-                      minimumFractionDigits: 0,
-                    }).format(totalSupply)}`
-                )}
-              </Typography>
-            </Paper>
-          </Zoom>
-        </Grid>
-      </Grid> */}
-        <TradingViewWidget
-        symbol={"ETHUSDT / WETHMKONG"}
-        theme={Themes.DARK}
-        interval="D"
-        locale="en"
-        timezone="America/New York"
-        hideSideToolbar={false}
-        details
-        news={["headlines"]}
-      />
+      <Container>
 
-      {/* <Box className="main-data-area">
-        <Grid container spacing={2} className="data-grid">
-          <Grid item lg={4} sm={12}>
-            <div className="dune-card">
-              <iframe
-                frameBorder="0"
-                loading="lazy"
-                src="https://duneanalytics.com/embeds/28286/57140/b0e3c522-8ace-47e8-8ac9-bc4ebf10b8c7"
-                title="Total Value Staking"
-              />
-            </div>
-          </Grid>
-
-          <Grid item lg={4} sm={12}>
-            <div className="dune-card">
-              <iframe
-                frameBorder="0"
-                loading="lazy"
-                src="https://duneanalytics.com/embeds/29778/60051/6328b87b-183e-4456-888d-d91048ff8cff"
-                title="Market value of Treasury"
-              />
-            </div>
-          </Grid>
-
-          <Grid item lg={4} sm={12}>
-            <div className="dune-card">
-              <iframe
-                frameBorder="0"
-                loading="lazy"
-                src="https://duneanalytics.com/embeds/29153/58862/b6d18145-763a-48b6-ac4c-a8e43ec1c1f6"
-                title="Risk Free Value of Treasury"
-              />
-            </div>
-          </Grid>
-
-          <Grid item lg={4} sm={12}>
-            <div className="dune-card">
-              <iframe
-                frameBorder="0"
-                loading="lazy"
-                src="https://duneanalytics.com/embeds/29815/60140/0be45969-dfc2-4625-9b48-d7af19a45546"
-                title="Total Value Staking"
-              />
-            </div>
-          </Grid>
-
-          <Grid item lg={4} sm={12}>
-            <div className="dune-card">
-              <iframe
-                frameBorder="0"
-                loading="lazy"
-                src="https://duneanalytics.com/embeds/27661/55859/fd0e3db2-d033-4000-9f70-c65de52ef9a9"
-                title="Holders"
-              />
-            </div>
-          </Grid>
-
-          <Grid item lg={4} sm={12}>
-            <div className="dune-card">
-              <iframe
-                frameBorder="0"
-                loading="lazy"
-                src="https://duneanalytics.com/embeds/34202/69216/17e353f6-ccb4-42ff-b6cb-150f69543f4d"
-                title="APY Over Time"
-              />
-            </div>
-          </Grid>
-
-          <Grid item lg={6} sm={12}>
-            <div className="dune-card">
-              <iframe
-                frameBorder="0"
-                loading="lazy"
-                src="https://duneanalytics.com/embeds/28756/58813/c7893c75-d8f1-421e-85c3-556a22cd7885"
-                title="OHM Stakers"
-              />
-            </div>
-          </Grid>
-
-          <Grid item lg={6} sm={12}>
-            <div className="dune-card">
-              <iframe
-                frameBorder="0"
-                loading="lazy"
-                src="https://duneanalytics.com/embeds/37326/74014/f0ad674a-2787-4314-b534-86dc1b910922"
-                title="Runway Available"
-              />
-            </div>
-          </Grid>
-        </Grid>
-      </Box> */}
+      </Container>
     </div>
+    <Container>
+      <div style={{display:"flex", justifyContent:"center", marginTop: "40px", marginBottom:"30px", alignItems: "center"}}>
+        <img src={logo} withd="150px" height="150px" />
+        <Typography style={{color: "#965E96", fontSize:"50px", lineHeight:"1.1", fontWeight:"600", marginLeft:"50px"}}>
+          $MEME KONG Holders
+        </Typography>
+      </div>
+      <div>
+        <div style={{marginBottom:"10px", display:"flex", justifyContent:"space-between"}} >
+          <TextField id="outlined-basic" label="new Address" variant="outlined" style={{width:"100%" }} />
+          <Button variant="outlined" color="success" style={{marginLeft:"10px"}}>Add Address</Button>
+        </div>
+        <Table bordered style={{background:"#191f244d", color: "white"}} size="30sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Username</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Larry the Bird</td>
+              <td>@twitter</td>
+              <td>@twitter</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Larry the Bird</td>
+              <td>@twitter</td>
+              <td>@twitter</td>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
+    </Container>
+  </div>
+    
   );
 }
 

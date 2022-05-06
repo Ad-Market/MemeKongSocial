@@ -38,7 +38,7 @@ function Home() {
   const smallerScreen = useMediaQuery("(max-width: 650px)");
   const verySmallScreen = useMediaQuery("(max-width: 379px)");
 
-  return <div id="home_tarzan">
+  return <div id="home_tarzan" style={{padding: "10px"}}>
     <div className="boodyBox fxColumn">
       <img src={Bg} alt="" className="bg" />
     </div>
