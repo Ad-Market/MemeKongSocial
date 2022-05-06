@@ -44,7 +44,7 @@ function NavContent() {
 
   const checkPage = useCallback((match, location, page) => {
     const currentPath = location.pathname.replace("/", "");
-    if (currentPath.indexOf("dashboard") >= 0 && page === "dashboard") {
+    if (currentPath.indexOf("social") >= 0 && page === "social") {
       return true;
     }
     if (currentPath.indexOf("stake") >= 0 && page === "stake") {
@@ -109,9 +109,9 @@ function NavContent() {
               <Link
                 component={NavLink}
                 id="dash-nav"
-                to="/dashboard"
+                to="/social"
                 isActive={(match, location) => {
-                  return checkPage(match, location, "dashboard");
+                  return checkPage(match, location, "social");
                 }}
                 className={`button-dapp-menu ${isActive ? "active" : ""}`}
               >

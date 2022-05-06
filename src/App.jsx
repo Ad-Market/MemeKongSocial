@@ -16,7 +16,7 @@ import { calcBondDetails } from "./slices/BondSlice";
 import { loadAppDetails } from "./slices/AppSlice";
 import { loadAccountDetails, calculateUserBondDetails } from "./slices/AccountSlice";
 
-import { Home, Stake, Dashboard, TreasuryDashboard, Presale, Swap } from "./views";
+import { Home, Wallet, Dashboard, TreasuryDashboard, Presale, Swap } from "./views";
 import TopBar from "./components/TopBar/TopBar.jsx";
 import NavDrawer from "./components/Sidebar/NavDrawer.jsx";
 import LoadingSplash from "./components/Loading/LoadingSplash";
@@ -108,12 +108,12 @@ function App() {
     let loadProvider = provider;
 
     //if (whichDetails === "app") {
-      loadApp(loadProvider);
+      // loadApp(loadProvider);
     //}
 
     // don't run unless provider is a Wallet...
     if (whichDetails === "account" && address && connected) {
-      loadAccount(loadProvider);
+      // loadAccount(loadProvider);
     }
   }
 
@@ -161,17 +161,17 @@ function App() {
   // this useEffect fires on state change from above. It will ALWAYS fire AFTER
   useEffect(() => {
     // don't load ANY details until wallet is Checked
-    if (walletChecked) {
-      loadDetails("app");
-    }
+    // if (walletChecked) {
+    //   loadDetails("app");
+    // }
   }, [walletChecked]);
 
   // this useEffect picks up any time a user Connects via the button
   useEffect(() => {
     // don't load ANY details until wallet is Connected
-    if (connected) {
-      loadDetails("account");
-    }
+    // if (connected) {
+    //   loadDetails("account");
+    // }
   }, [connected]);
 
   const handleDrawerToggle = () => {
@@ -215,17 +215,14 @@ function App() {
 
           <div id="app_page" className={`${path === "/" ? null : classes.content} ${isSmallerScreen && classes.contentShift}`} style={{ position: 'relative', background: "#2C1349" }}>
             <Switch>
-              <Route exact path="/dashboard">
+              <Route exact path="/social">
                 <TreasuryDashboard />
-              </Route>
-              <Route path="/stake">
-                <Stake />
               </Route>
               <Route path="/state">
                 <Dashboard />
               </Route>
               <Route path="/wallet">
-                <Stake />
+                <Wallet />
               </Route>
               <Route path="/home">
                 <Home />
