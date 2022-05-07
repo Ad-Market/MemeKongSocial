@@ -26,7 +26,7 @@ import TabPanel from "../../components/TabPanel";
 import { getOhmTokenImage, getTokenImage, trim } from "../../helpers";
 import { changeApproval, changeStake, claimReward } from "../../slices/StakeThunk";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import "./stake.scss";
+import "./wallet.scss";
 import { useWeb3Context } from "src/hooks/web3Context";
 import { isPendingTxn, txnButtonText } from "src/slices/PendingTxnsSlice";
 import { Skeleton } from "@material-ui/lab";
@@ -34,7 +34,7 @@ import ExternalStakePool from "./ExternalStakePool";
 import { error } from "../../slices/MessagesSlice";
 import { ethers } from "ethers";
 import ClaimTimer from "../../components/RebaseTimer/ClaimTimer";
-
+import NetworkSelect from "./Component/NetworkSelect";
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -194,38 +194,18 @@ function Stake() {
           <Grid container direction="column" spacing={2}>
             <Grid item>
               <div className="card-header">
-                <Typography variant="h3">Stake </Typography>
+                <Typography variant="h3">MKONG Wallet </Typography>
+                <NetworkSelect />
               </div>
             </Grid>
 
             <Grid item>
               <div className="stake-top-metrics">
                 <Grid container spacing={2} alignItems="flex-end">
-                  <Grid item xs={12} sm={6} md={6} lg={6}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
                     <div className="stake-apy">
-                      <Typography variant="h4" color="textSecondary">
-                        APY
-                      </Typography>
                       <Typography variant="h3" style={{color: "#965E96", fontWeight: "bold"}}>
-                        18%
-                      </Typography>
-                    </div>
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={6} lg={6}>
-                    <div className="stake-tvl">
-                      <Typography variant="h4" color="textSecondary">
-                        Total Value Deposited
-                      </Typography>
-                      <Typography variant="h3" style={{color: "#965E96", fontWeight: "bold"}}>
-                        {stakingTVL ? (
-                          new Intl.NumberFormat("en-US", {
-                            maximumFractionDigits: 0,
-                            minimumFractionDigits: 0,
-                          }).format(stakingTVL) + ' Meme Kong'
-                        ) : (
-                          <Skeleton width="150px" />
-                        )}
+                        18.004 EHT
                       </Typography>
                     </div>
                   </Grid>

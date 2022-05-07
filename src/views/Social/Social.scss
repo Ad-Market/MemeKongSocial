@@ -1,4 +1,4 @@
-#treasury-dashboard-view {
+#social-view {
   overflow-y: hidden;
   overflow-x: hidden;
   height: 100%;
@@ -9,8 +9,11 @@
   justify-content: flex-start;
   align-items: center;
   overflow-y: auto;
-  -ms-overflow-style: none !important; /* IE and Edge */
-  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+  scrollbar-width: none !important;
+
+  /* Firefox */
   &::-webkit-scrollbar {
     display: none !important;
   }
@@ -19,31 +22,80 @@
     max-width: unset !important;
     width: 100%;
     margin: auto;
+
     .card-header {
       margin-bottom: 1rem;
     }
+
     &.ohm-chart-card {
       .chart-card-header {
         padding: 0px 20px !important;
         min-width: 300px;
       }
+
       height: 355px;
     }
   }
+
+
+  .twitter-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+    margin-top: 10px;
+    h5 {
+      font-weight: 400;
+    }
+
+    h4 {
+      font-weight: 500;
+    }
+
+    .stake-apy,
+    .stake-tvl,
+    .stake-index {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-overflow: ellipsis;
+      // white-space: nowrap;
+      overflow: hidden;
+    }
+
+    iframe {
+      z-index: 10 !important;
+    }
+  }
+
+  .mobile .twitter-container {
+
+    .stake-apy,
+    .stake-tvl,
+    .stake-index {
+      align-items: flex-start;
+    }
+  }
+
   .hero-metrics {
     width: 100%;
     margin-bottom: 23px;
     text-align: center;
+
     .ohm-card {
       max-width: unset !important;
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: space-evenly;
+
       h5 {
         font-weight: bold;
       }
     }
   }
+
   .data-grid {
     overflow: hidden;
   }
@@ -53,12 +105,14 @@
   .ohm-card {
     width: 97%;
   }
+
   .hero-metrics .ohm-card {
-    > .MuiBox-root {
+    >.MuiBox-root {
       flex-direction: column;
       align-items: flex-start;
       flex-wrap: wrap;
     }
+
     div.metric {
       text-align: left !important;
     }
@@ -71,6 +125,7 @@
     min-width: 30% !important;
     max-width: 60%;
     text-align: left !important;
+
     &.market,
     &.price,
     &.wsoprice,
@@ -85,7 +140,7 @@
 
 .very-small {
   .hero-metrics .ohm-card {
-    > .MuiBox-root {
+    >.MuiBox-root {
       flex-direction: column;
       justify-content: center;
     }

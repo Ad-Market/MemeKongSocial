@@ -59,7 +59,7 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
 
   const checkPage = useCallback((match, location, page) => {
     const currentPath = location.pathname.replace("/", "");
-    if (currentPath.indexOf("dashboard") >= 0 && page === "dashboard") {
+    if (currentPath.indexOf("social") >= 0 && page === "social") {
       return true;
     }
     if (currentPath.indexOf("stake") >= 0 && page === "stake") {
@@ -105,9 +105,9 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
           <Link
             component={NavLink}
             id="dash-nav"
-            to="/dashboard"
+            to="/social"
             isActive={(match, location) => {
-              return checkPage(match, location, "dashboard");
+              return checkPage(match, location, "social");
             }}
             className={`button-dapp-menu ${isActive ? "active" : ""}`}
           >
@@ -119,9 +119,9 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
           <Link
             component={NavLink}
             id="stake-nav"
-            to="/stake"
+            to="/wallet"
             isActive={(match, location) => {
-              return checkPage(match, location, "stake");
+              return checkPage(match, location, "wallet");
             }}
           // className={`button-dapp-menu ${isActive ? "active" : ""}`}
           >

@@ -17,7 +17,7 @@ function Dashboard() {
 
   const isAppLoading = useSelector(state => !state.app?.marketPrice ?? true);
   const marketPrice = useSelector(state => {
-    localStorage.setItem('rememberMe', 'QQQ');
+    //localStorage.setItem('rememberMe', 'QQQ');
     return state.app.marketPrice;
   });
   const circSupply = useSelector(state => {
@@ -71,7 +71,7 @@ function Dashboard() {
             <div style={{border:"1px solid white", borderRadius:"15px", padding:"30px", margin:"40px", fontSize:"40px", lineHeight:"1.0", textAlign:"center"}}>
               <Row>
                 <Col style={{}}>
-                  Price : AAA
+                  Price : {marketPrice}
                 </Col>
                 <Col>
                   24hr % : AAA
