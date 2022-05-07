@@ -1,5 +1,5 @@
 .token-activity-container {
-    height: 40px;
+    height: 60px;
     padding: 10px;
     display: flex;
     justify-content: space-between;
@@ -19,6 +19,7 @@
         align-self: center;
         display: flex;
         justify-content: center;
+        align-self: center;
         .logo {
             width: 35px;
             height: 35px;
@@ -36,7 +37,31 @@
     .token-activity {
         align-self: center;
     }
+
     
+    .transaction-balance {
+        align-self: center;
+    }
+
+    .transaction-info-container {
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+
+        .transaction-type {
+            font-size: 18px;
+            color: aqua;
+            align-self: flex-start;
+        }
+
+        .transaction-info {
+            font-size: 16px;
+            color:green;
+            align-self: flex-start;
+        }
+
+        
+    }
 }
 
 .token-activity-container:hover {

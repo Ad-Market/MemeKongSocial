@@ -179,9 +179,6 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
         </Button>
         <Box display="flex" justifyContent="space-between" width="100%">
           <ButtonGroup/>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <ConnectMenu theme={theme} />
-          </div>
         </Box>
       </Toolbar>
     </AppBar>
