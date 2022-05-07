@@ -63,11 +63,7 @@ const TimeCountdown: React.FC<ProgressCountdownProps> = ({
     )
   }
   // return (<Countdown date={deadlineVal} onComplete={onComplete} renderer={countdownRenderer} />)
-<<<<<<< HEAD
   return (<div/>)
-=======
-  return (<> </>)
->>>>>>> 4a2f64285c5b19e6d7547575546650ece385e1c7
   // return (
   //   <StyledCardContentInner>
   //     
