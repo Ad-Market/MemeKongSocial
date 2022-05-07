@@ -54,40 +54,40 @@ export const loadAppDetails = createAsyncThunk(
 
     let endBlock = 0;
 
-    const kageContrat = new ethers.Contract(addresses[networkID].KAGE_ADDRESS as string, ierc20Abi, provider);
-    const kageStakingContrat = new ethers.Contract(addresses[networkID].KAGESTAKING_ADDRESS as string, kageStakingAbi, provider);
+    // const kageContrat = new ethers.Contract(addresses[networkID].KAGE_ADDRESS as string, ierc20Abi, provider);
+    // const kageStakingContrat = new ethers.Contract(addresses[networkID].KAGESTAKING_ADDRESS as string, kageStakingAbi, provider);
 
-    const totalStaked = Number(getDisplayBalance(await kageStakingContrat.totalStakedAmount(), 9));
+    // const totalStaked = Number(getDisplayBalance(await kageStakingContrat.totalStakedAmount(), 9));
 
-    const totalSupply = Number(getDisplayBalance(await kageContrat.totalSupply(), 9));
+    // const totalSupply = Number(getDisplayBalance(await kageContrat.totalSupply(), 9));
 
-    const circSupply = totalSupply - totalStaked;
+    // const circSupply = totalSupply - totalStaked;
 
-    // Current index
-    const currentIndex = 1;
+    // // Current index
+    // const currentIndex = 1;
 
-    const marketCap = circSupply * marketPrice
+    // const marketCap = circSupply * marketPrice
 
-    const Staked = totalStaked / totalSupply;
+    // const Staked = totalStaked / totalSupply;
 
-    const treasuryMarketValue = 0; // = await treasuryBalanceAll(networkID, provider)
-    const stakingTVL = marketCap * (Staked / 100)
+    // const treasuryMarketValue = 0; // = await treasuryBalanceAll(networkID, provider)
+    // const stakingTVL = marketCap * (Staked / 100)
 
     return {
-      currentIndex: ethers.utils.formatUnits(currentIndex, "gwei"),
+      currentIndex:"0",
       currentBlock,
       endBlock,
       fiveDayRate: 0,
       stakingAPY: 0,
-      stakingTVL,
-      Staked,
+      stakingTVL: 0,
+      Staked: 0,
       stakingRebase: 0,
-      marketCap,
+      marketCap: 0,
       marketPrice,
       circVal: 0,
-      circSupply,
-      totalSupply,
-      treasuryMarketValue
+      circSupply: 0,
+      totalSupply: 0,
+      treasuryMarketValue: 0
     } as IAppData;
   },
 );

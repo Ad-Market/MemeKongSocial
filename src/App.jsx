@@ -108,7 +108,7 @@ function App() {
     let loadProvider = provider;
 
     //if (whichDetails === "app") {
-      // loadApp(loadProvider);
+    loadApp(loadProvider);
     //}
 
     // don't run unless provider is a Wallet...
@@ -162,7 +162,7 @@ function App() {
   useEffect(() => {
     // don't load ANY details until wallet is Checked
     // if (walletChecked) {
-    //   loadDetails("app");
+    loadDetails("app");
     // }
   }, [walletChecked]);
 
