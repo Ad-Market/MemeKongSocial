@@ -144,18 +144,18 @@ function App() {
   // ... if we don't wait we'll ALWAYS fire API calls via JsonRpc because provider has not
   // ... been reloaded within App.
   useEffect(() => {
-    if (hasCachedProvider()) {
-      // then user DOES have a wallet
-      connect().then(() => {
-        setWalletChecked(true);
-      });
-    } else {
-      // then user DOES NOT have a wallet
-      setWalletChecked(true);
-    }
+    // if (hasCachedProvider()) {
+    //   // then user DOES have a wallet
+    //   connect().then(() => {
+    //     setWalletChecked(true);
+    //   });
+    // } else {
+    //   // then user DOES NOT have a wallet
+    //   setWalletChecked(true);
+    // }
 
-    // We want to ensure that we are storing the UTM parameters for later, even if the user follows links
-    storeQueryParameters();
+    // // We want to ensure that we are storing the UTM parameters for later, even if the user follows links
+    // storeQueryParameters();
   }, []);
 
   // this useEffect fires on state change from above. It will ALWAYS fire AFTER
@@ -228,7 +228,7 @@ function App() {
                 <Home />
               </Route>
               <Route exact path="/">
-                <Redirect to="dashboard" />
+                <Redirect to="home" />
               </Route>
               <Route component={NotFound} />
             </Switch>
