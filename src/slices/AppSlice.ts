@@ -21,9 +21,7 @@ export const loadAppDetails = createAsyncThunk(
 
     let marketPrice;
     try {
-      // const originalPromiseResult = await dispatch(
-      //   loadMarketPrice({ networkID: networkID, provider: provider }),
-      // ).unwrap();
+
       const res : any = await axios.get("https://deep-index.moralis.io/api/v2/erc20/0xeE6b9CF11D968E0bAc7BFfF547577B8AE35B8065/price?chain=eth", {
         headers: { "X-API-Key": "YEEwMh0B4VRg6Hu5gFQcKxqinJ7UizRza1JpbkyMgNTfj4jUkSaZVajOxLNabvnt" },
       });
@@ -42,7 +40,6 @@ export const loadAppDetails = createAsyncThunk(
         marketPrice,
         marketCap: 0,
         circSupply: 0,
-
         totalSupply: 0,
         treasuryMarketValue: 0,
       };
@@ -51,25 +48,17 @@ export const loadAppDetails = createAsyncThunk(
     if (!addresses[networkID].STAKING_ADDRESS)
       return null;
 
-
     let endBlock = 0;
 
     // const kageContrat = new ethers.Contract(addresses[networkID].KAGE_ADDRESS as string, ierc20Abi, provider);
     // const kageStakingContrat = new ethers.Contract(addresses[networkID].KAGESTAKING_ADDRESS as string, kageStakingAbi, provider);
-
     // const totalStaked = Number(getDisplayBalance(await kageStakingContrat.totalStakedAmount(), 9));
-
     // const totalSupply = Number(getDisplayBalance(await kageContrat.totalSupply(), 9));
-
     // const circSupply = totalSupply - totalStaked;
-
     // // Current index
     // const currentIndex = 1;
-
     // const marketCap = circSupply * marketPrice
-
     // const Staked = totalStaked / totalSupply;
-
     // const treasuryMarketValue = 0; // = await treasuryBalanceAll(networkID, provider)
     // const stakingTVL = marketCap * (Staked / 100)
 
@@ -144,6 +133,7 @@ const loadMarketPrice = createAsyncThunk("app/loadMarketPrice", async ({ network
   } catch (e) {
     marketPrice = 0;
   }
+  console.log('coinmarketcap==========');
   return { marketPrice };
 });
 

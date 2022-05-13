@@ -1,20 +1,35 @@
 #dashboard-view {
   // overflow-y: hidden;
   // overflow-x: hidden;
-  background-color:#07071D;
-  height: 100vh !important;
+  background-color:#782c7880;
+  // height: 100vh !important;
   overflow: auto;
   align-items: center;
   gap: 15px;
-  padding: 40px;
-  font-size: 16px;
-//   .ohm-card {
-//     white-space: nowrap;
-//     width: auto;
-//     margin: auto;
-//   }
-// }
   
+  font-size: 16px;
+
+  #container {
+    max-width: 90%;
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .stateTokenInfo {
+    border-radius: 5px;
+    background: rgba($color: #AC1FC4, $alpha: 0.1);
+    padding:10px;
+    margin: 10px;
+  }
+
+  .stateTokenInfoContent {
+    text-align: center;
+    font-size: 25px;
+    color: #F6BB2C;
+  }
+
   .logo{
     display: flex;
     justify-content: flex-start;
@@ -27,6 +42,9 @@
   th, td {
     padding: 25px !important;
     text-align: left;
+    @media (max-width: 1000px) {
+      padding: 12px 9px !important;
+    }
   }
 // .top-row-data {
 //   position: sticky;
