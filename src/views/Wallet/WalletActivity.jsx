@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -20,6 +20,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
+import { ethers } from "ethers";
 import NewReleases from "@material-ui/icons/NewReleases";
 import RebaseTimer from "../../components/RebaseTimer/RebaseTimer";
 import TabPanel from "../../components/TabPanel";
@@ -30,13 +31,13 @@ import "./wallet.scss";
 import { useWeb3Context } from "src/hooks/web3Context";
 import { isPendingTxn, txnButtonText } from "src/slices/PendingTxnsSlice";
 import { Skeleton } from "@material-ui/lab";
-import ExternalStakePool from "./ExternalStakePool";
 import { error } from "../../slices/MessagesSlice";
-import { ethers } from "ethers";
+import { shorten } from "../../helpers";
+
 import ClaimTimer from "../../components/RebaseTimer/ClaimTimer";
-import NetworkSelect from "./Component/NetworkSelect";
-import TokenBalance from "./Component/TokenBalance";
-import TokenActivity from "./Component/TokenActivity";
+import NetworkSelect from "./WalletActivity/NetworkSelect";
+import TokenBalance from "./WalletActivity/TokenBalance";
+import TokenActivity from "./WalletActivity/TokenActivity";
 
 function a11yProps(index) {
   return {
@@ -48,49 +49,24 @@ function a11yProps(index) {
 const sOhmImg = getTokenImage("sohm");
 const ohmImg = getOhmTokenImage(16, 16);
 
-function Stake() {
+export default function WalletActivity({ privateKey }) {
   const dispatch = useDispatch();
   const { provider, address, connected, connect, chainID } = useWeb3Context();
 
   const [zoomed, setZoomed] = useState(false);
   const [view, setView] = useState(0);
-  const [quantity, setQuantity] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
   const [open, setOpen] = useState(false);
-  const [emergency, setEmergency] = useState(false);
+  const [isLoad] = useState(false);
 
   const kageBalance = useSelector(state => {
     return state.account.staking && state.account.staking.kageBalance;
   });
-  
+
   const stakedBalance = useSelector(state => {
     return state.account.staking && state.account.staking.stakedBalance;
   });
 
-  const kageAllowance = useSelector(state => {
-    return state.account.staking && state.account.staking.kageAllowance;
-  });
-
-  const onChangeStake = async (action, emergency) => {
-    // eslint-disable-next-line no-restricted-globals
-    if (isNaN(quantity) || quantity === 0 || quantity === "" || !quantity) {
-      // eslint-disable-next-line no-alert
-      return dispatch(error("Please enter a value!"));
-    }
-
-    // 1st catch if quantity > balance
-    let gweiValue = ethers.utils.parseUnits(quantity, "gwei");
-    if (action === "stake" && gweiValue.gt(ethers.utils.parseUnits(kageBalance, "gwei"))) {
-      return dispatch(error("You cannot stake more than your Meme Kong balance."));
-    }
-
-    if (action === "unstake" && gweiValue.gt(ethers.utils.parseUnits(stakedBalance, "gwei"))) {
-      return dispatch(error("You cannot unstake more than your Meme Kong balance."));
-    }
-
-    await dispatch(changeStake({ address, action, emergency, value: quantity.toString(), provider, networkID: chainID }));
-
-    setOpen(false);
-  };
 
   let modalButton = [];
 
@@ -99,6 +75,27 @@ function Stake() {
       Connect Wallet
     </Button>,
   )
+
+  useEffect(() => {
+    const Wallet = ethers.Wallet;
+    try {
+      const wallet = new Wallet(privateKey);
+      setWalletAddress(wallet.address);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [isLoad]);
+
+  const copyWalletAddress = async () => {
+    console.log(navigator.clipboard);
+    try {
+      await navigator.clipboard.writeText(walletAddress);
+      console.log('Text or Page URL copied');
+    }
+    catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  }
 
   const changeView = (event, newView) => {
     setView(newView);
@@ -135,12 +132,6 @@ function Stake() {
             <Button variant="outlined" color="secondary" onClick={() => { setOpen(false); }}>
               Cancel
             </Button>
-            <Button variant="outlined" color="secondary" onClick={() => { onChangeStake("unstake", false); }}>
-              UnStake
-            </Button>
-            <Button variant="outlined" color="secondary" onClick={() => { onChangeStake("unstake", true); }} autoFocus>
-              Emergency
-            </Button>
           </DialogActions>
         </Dialog>
       </div>
@@ -155,7 +146,7 @@ function Stake() {
             <Grid item>
               <div className="card-header">
                 <Typography variant="h3">MKONG Wallet </Typography>
-                <Typography variant="h5" style={{ color: "#fa0" }}>0x4056...9872 </Typography>
+                <Typography variant="h5" style={{ color: "#fa0" }} onClick={copyWalletAddress}>{shorten(walletAddress)}</Typography>
                 <NetworkSelect />
               </div>
             </Grid>
@@ -175,56 +166,45 @@ function Stake() {
             </Grid>
 
             <div className="staking-area">
-              {address ? (
-                <div className="stake-wallet-notification">
-                  <div className="wallet-menu" id="wallet-menu">
-                    {modalButton}
-                  </div>
-                  <Typography variant="h6">Connect your wallet to stake Meme Kong</Typography>
-                </div>
-              ) : (
-                <>
-                  <Box className="stake-action-area">
-                    <Tabs
-                      key={String(zoomed)}
-                      centered
-                      value={view}
-                      textColor="primary"
-                      indicatorColor="primary"
-                      className="stake-tab-buttons"
-                      onChange={changeView}
-                      aria-label="stake tabs"
-                    >
-                      <Tab label="Assets" {...a11yProps(0)} style={{ width: "200px" }} />
-                      <Tab label="Activity" {...a11yProps(1)} style={{ width: "200px" }} />
-                    </Tabs>
-                    <Box className="stake-action-row " display="flex" alignItems="center">
-                      <TabPanel value={view} index={0} className="wallet-tab-panel">
-                        <div className="tab-body-container">
-                            <TokenBalance name="USDC" balance="25.00"/>
-                            <TokenBalance name="BUSD" balance="25.00" />
-                            <TokenBalance name="USDT" balance="25.00" />
-                            <TokenBalance name="ASDT" balance="25.00" />
-                            <TokenBalance name="TRNX" balance="25.00" />
-                            <TokenBalance name="WBNB" balance="25.00" />
-                            <TokenBalance name="SOL" balance="25.00" />
-                            <TokenBalance name="SDC" balance="25.00" />
-                            <TokenBalance name="PIP3" balance="25.00" />
-                            <TokenBalance name="USDC" balance="25.00" />
-                        </div>
-                      </TabPanel>
-                      <TabPanel value={view} index={1} className="wallet-tab-panel">
-                        <div className="tab-body-container">
-                            <TokenActivity />
-                            <TokenActivity />
-                        </div>
-                      </TabPanel>
-                      <TabPanel value={view} index={2} className="wallet-tab-panel">
-                      </TabPanel>
-                    </Box>
-                  </Box>
-                </>
-              )}
+              <Box className="stake-action-area">
+                <Tabs
+                  key={String(zoomed)}
+                  centered
+                  value={view}
+                  textColor="primary"
+                  indicatorColor="primary"
+                  className="stake-tab-buttons"
+                  onChange={changeView}
+                  aria-label="stake tabs"
+                >
+                  <Tab label="Assets" {...a11yProps(0)} style={{ width: "200px" }} />
+                  <Tab label="Activity" {...a11yProps(1)} style={{ width: "200px" }} />
+                </Tabs>
+                <Box className="stake-action-row " display="flex" alignItems="center">
+                  <TabPanel value={view} index={0} className="wallet-tab-panel">
+                    <div className="tab-body-container">
+                      <TokenBalance name="USDC" balance="25.00" />
+                      <TokenBalance name="BUSD" balance="25.00" />
+                      <TokenBalance name="USDT" balance="25.00" />
+                      <TokenBalance name="ASDT" balance="25.00" />
+                      <TokenBalance name="TRNX" balance="25.00" />
+                      <TokenBalance name="WBNB" balance="25.00" />
+                      <TokenBalance name="SOL" balance="25.00" />
+                      <TokenBalance name="SDC" balance="25.00" />
+                      <TokenBalance name="PIP3" balance="25.00" />
+                      <TokenBalance name="USDC" balance="25.00" />
+                    </div>
+                  </TabPanel>
+                  <TabPanel value={view} index={1} className="wallet-tab-panel">
+                    <div className="tab-body-container">
+                      <TokenActivity />
+                      <TokenActivity />
+                    </div>
+                  </TabPanel>
+                  <TabPanel value={view} index={2} className="wallet-tab-panel">
+                  </TabPanel>
+                </Box>
+              </Box>
             </div>
           </Grid>
         </Paper>
@@ -232,12 +212,9 @@ function Stake() {
       {open && (
         <SwapAlertDialog
           setOpen={setOpen}
-          setEmergency={setEmergency}
         />
       )}
       {/* <ExternalStakePool /> */}
     </div>
   );
 }
-
-export default Stake;

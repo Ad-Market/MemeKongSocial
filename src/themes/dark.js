@@ -91,18 +91,17 @@ export const dark = responsiveFontSizes(
             backgroundColor: darkTheme.paperBg,
             "&.ohm-card": {
               backgroundColor: darkTheme.paperBg,
+              marginTop: "50px !important",
             },
             "&.ohm-modal": {
               backgroundColor: darkTheme.modalBg,
             },
             "&.ohm-menu": {
               backgroundColor: darkTheme.menuBg,
-              backdropFilter: "blur(33px)",
             },
             "&.ohm-popover": {
               backgroundColor: darkTheme.popoverBg,
               color: darkTheme.color,
-              backdropFilter: "blur(15px)",
             },
           },
         },
@@ -183,23 +182,39 @@ export const dark = responsiveFontSizes(
           },
         },
         MuiButton: {
+          root: {
+            transition: "none",
+          },
+          contained: {
+            "&.Mui-disabled": {
+              background: "#0007",
+            },
+          },
           containedPrimary: {
-            color: darkTheme.primaryButtonColor,
-            backgroundColor: darkTheme.gold,
+            color: "white",
+            
+            padding: "25px",
+            paddingBottom: "20px",
+            width: "200px",
+            boxShadow: "2px 2px 9px rgba(0, 0, 0, 0.25) !important",
+            borderWidth: "1px",
+            borderStyle: "solid",
+            backgroundColor: "#0000",
+            borderRadius: "37px !important",
+            fontFamily: "Montserrat",
+            fontStyle: "normal",
+            fontWeight: "800",
+            fontSize: "16px !important",
+            minHeight: "40px !important",
+            margin: "20px",
             "&:hover": {
-              backgroundColor: darkTheme.primaryButtonHoverBG,
-              color: darkTheme.primaryButtonHoverColor,
+              background: "rgb(44 19 73)",
+              backgroundColor: "rgb(44 19 73)",
             },
             "&:active": {
-              backgroundColor: darkTheme.primaryButtonHoverBG,
+              background: "rgba(255, 255, 255, 0.0)",
+              backgroundColor: "rgba(255, 255, 255, 0.0)",
               color: darkTheme.primaryButtonHoverColor,
-            },
-            "@media (hover:none)": {
-              color: darkTheme.primaryButtonColor,
-              backgroundColor: darkTheme.gold,
-              "&:hover": {
-                backgroundColor: darkTheme.primaryButtonHoverBG,
-              },
             },
           },
           containedSecondary: {
