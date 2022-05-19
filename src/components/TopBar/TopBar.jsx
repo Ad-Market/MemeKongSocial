@@ -96,7 +96,7 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
             isActive={(match, location) => {
               return checkPage(match, location, "home");
             }}
-          // className={`button-dapp-menu ${isActive ? "active" : ""}`}
+            className={`button-dapp-menu ${isActive ? "active" : ""}`}
           >
             <Typography variant="h3" className={classes.buttonProp}>
               Home
@@ -123,7 +123,7 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
             isActive={(match, location) => {
               return checkPage(match, location, "wallet");
             }}
-          // className={`button-dapp-menu ${isActive ? "active" : ""}`}
+            className={`button-dapp-menu ${isActive ? "active" : ""}`}
           >
             <Typography variant="h3" className={classes.buttonProp}>
               Wallet
@@ -136,10 +136,10 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
             isActive={(match, location) => {
               return checkPage(match, location, "state");
             }}
-          // className={`button-dapp-menu ${isActive ? "active" : ""}`}
+            className={`button-dapp-menu ${isActive ? "active" : ""}`}
           >
             <Typography variant="h3" className={classes.buttonProp}>
-              State
+              Stats
             </Typography>
           </Link>
           <Link
@@ -149,7 +149,7 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
             isActive={(match, location) => {
               return checkPage(match, location, "stake");
             }}
-          // className={`button-dapp-menu ${isActive ? "active" : ""}`}
+            className={`button-dapp-menu ${isActive ? "active" : ""}`}
           >
             <Typography variant="h3" className={classes.buttonProp}>
               Setting

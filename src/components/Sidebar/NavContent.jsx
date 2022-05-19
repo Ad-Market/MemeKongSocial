@@ -47,16 +47,16 @@ function NavContent() {
     if (currentPath.indexOf("social") >= 0 && page === "social") {
       return true;
     }
-    if (currentPath.indexOf("stake") >= 0 && page === "stake") {
+    if (currentPath.indexOf("home") >= 0 && page === "home") {
       return true;
     }
-    if (currentPath.indexOf("resourcelist") >= 0 && page === "resourcelist") {
+    if (currentPath.indexOf("wallet") >= 0 && page === "wallet") {
       return true;
     }
-    if (currentPath.indexOf("governancelist") >= 0 && page === "governancelist") {
+    if (currentPath.indexOf("state") >= 0 && page === "state") {
       return true;
     }
-    if (currentPath.indexOf("finance") >= 0 && page === "finance") {
+    if (currentPath.indexOf("setting") >= 0 && page === "setting") {
       return true;
     }
     if (currentPath.indexOf("swap") >= 0 && page === "swap") {
@@ -109,7 +109,7 @@ function NavContent() {
               <Link
                 component={NavLink}
                 id="dash-nav"
-                to="/social"
+                to="/home"
                 isActive={(match, location) => {
                   return checkPage(match, location, "social");
                 }}
@@ -117,14 +117,14 @@ function NavContent() {
               >
                 <Typography variant="h6">
                   <SvgIcon color="primary" component={DashboardIcon} />
-                  Dashboard
+                  Home
                 </Typography>
               </Link>
 
               <Link
                 component={NavLink}
                 id="stake-nav"
-                to="/stake"
+                to="/social"
                 isActive={(match, location) => {
                   return checkPage(match, location, "stake");
                 }}
@@ -132,18 +132,13 @@ function NavContent() {
               >
                 <Typography variant="h6" className="fxCenter">
                   <SvgIcon color="primary" component={StakeIcon} />
-                  Stake
+                  Social
                 </Typography>
               </Link>
-              
-
-              {/* <Box className="menu-divider">
-                <Divider />
-              </Box>
               <Link
                 component={NavLink}
                 id="stake-nav"
-                to="#"
+                to="/wallet"
                 isActive={(match, location) => {
                   return checkPage(match, location, "swap");
                 }}
@@ -151,13 +146,13 @@ function NavContent() {
               >
                 <Typography variant="h6" className="fxCenter">
                   <SvgIcon color="primary" component={ZapIcon} />
-                  Swap
+                  Wallet
                 </Typography>
               </Link>
               <Link
                 component={NavLink}
                 id="calculator-nav"
-                to="#"
+                to="/state"
                 isActive={(match, location) => {
                   return checkPage(match, location, "calculator");
                 }}
@@ -165,7 +160,7 @@ function NavContent() {
               >
                 <Typography variant="h6">
                   <SvgIcon color="primary" component={PoolTogetherIcon} />
-                  Bridge
+                  State
                 </Typography>
               </Link>
               <Link
@@ -179,10 +174,10 @@ function NavContent() {
               >
                 <Typography variant="h6">
                   <SvgIcon color="primary" component={WrapIcon} />
-                  Launchpad
+                  Setting
                 </Typography>
               </Link>
-              <Link
+              {/* <Link
                 component={NavLink}
                 id="presale-nav"
                 to="#"

@@ -7,6 +7,7 @@ import { Container, Row, Col, } from 'react-bootstrap';
 import HolderTable from './HolderTable';
 import logo from "../../assets/MemeKongLogo.png";
 import rainframe from "../../assets/rain-bg.png";
+import statsframe from "../../assets/stats-bg.png";
 import axios from "axios";
 
 
@@ -97,7 +98,7 @@ function Stats() {
 
   return (
     <div>
-      <div id="dashboard-view" style={{backgroundImage: 'url("'+rainframe+'")', backgroundSize: 'cover', backgroundPosition: 'center center'}}>
+      <div id="dashboard-view" style={{backgroundImage: 'url("'+statsframe+'")', backgroundSize: 'cover', backgroundPosition: 'center center'}}>
         <Grid id = "container" direction="column">
           <Grid style={{marginTop: "100px"}} className={smallerScreen? classes.panel_style_mobile : classes.panel_style} >
             {(() => {
@@ -213,7 +214,7 @@ function Stats() {
                 <Row>
                   <Col className="stateTokenInfo">
                     Price
-                    <Typography variant="h6" className="stateTokenInfoContent">{Number(tokenPrice).toFixed(3)}</Typography>
+                    <Typography variant="h6" className="stateTokenInfoContent">${Number(tokenPrice).toFixed(3)}</Typography>
                   </Col>
                   <Col className="stateTokenInfo">
                     24hr %
@@ -244,7 +245,7 @@ function Stats() {
                   </Typography>
                   </Col>
                   <Col className="stateTokenInfo">
-                    Volume (24h)
+                    Trading Volume (24h)
                     <Typography variant="h6" className="stateTokenInfoContent" style={{color: "white"}}>{
                       new Intl.NumberFormat("en-US", {
                         style: "currency",

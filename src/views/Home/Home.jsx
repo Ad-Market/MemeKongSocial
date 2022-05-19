@@ -19,6 +19,7 @@ import GuanImg from '../../assets/ohm/copy-2-3@3x.png'
 import { shorten } from "../../helpers";
 import gorila from "../../assets/gorila.svg";
 import homebg from "../../assets/home_bg.png";
+import statsframe from "../../assets/stats-bg.png";
 import homeframe from "../../assets/home_frame.png";
 import { Card, Table, Badge, Dropdown, ProgressBar, Row, Col } from "react-bootstrap";
 
@@ -62,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 
     bg_image: {
       padding: '10px', 
-      backgroundImage: 'url("'+homebg+'")',
+      backgroundImage: 'url("'+statsframe+'")',
       backgroundSize: 'cover',
       backgroundPosition: 'center center',
     },
