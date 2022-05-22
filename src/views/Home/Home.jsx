@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     lgorilla_style: {
       position: "fixed",
       bottom: "0px",
-      left:"5%",
+      left:"10%",
       width: "200px",
       height: "200px",
     },
@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     rgorilla_style: {
       position: "fixed",
       bottom: "0px",
-      right:"5%",
+      right:"10%",
       width: "200px",
       height: "200px",
       transform: "scaleX(-1)"
