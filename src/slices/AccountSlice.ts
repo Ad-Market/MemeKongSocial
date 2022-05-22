@@ -49,42 +49,21 @@ interface IUserAccountDetails {
 
 export const loadAccountDetails = createAsyncThunk(
   "account/loadAccountDetails",
-  async ({ networkID, provider, address }: IBaseAddressAsyncThunk) => {
-    let stakeAllowance = 0;
-    let unstakeAllowance = 0;
-    //let cstPurchas
-    
-    const kageContrat = new ethers.Contract(addresses[networkID].KAGE_ADDRESS as string, ierc20Abi, provider);
-    const kageBalance = await kageContrat.balanceOf(address);
-    const kageAllowance = await kageContrat.allowance(address, addresses[networkID].KAGESTAKING_ADDRESS);
-    
-    const kageStakingContrat = new ethers.Contract(addresses[networkID].KAGESTAKING_ADDRESS as string, kageStakingAbi, provider);
-    const rewardRate = await kageStakingContrat.rewardRate();
-    const totalStaked = await kageStakingContrat.totalStakedAmount();
-    
-    const userInfo = await kageStakingContrat.userInfos(address);
-    const lastDepositTime = userInfo.lastDepositTime;
-    const stakedBalance = userInfo.stakedAmount;
-    // const rewardDebt = userInfo.rewardDebt;
-    const rewardDebt = await kageStakingContrat.calcReward(address);
-    const pendingToken = userInfo.pendingAmount;
-    let timeDiff2Claim = 999999;
-    if (pendingToken > 0){
-      timeDiff2Claim = await kageStakingContrat.timeDiffForClaim(address);
-    }
-    const isClaimable = await kageStakingContrat.isClaimable(address);
+  async () => {
+
+    let nativeBalance = 0;
+    let network = 0;
+    let walletAddress = 0;
+
+    const privateKey = localStorage.getItem("private_key");
+    const provider = new ethers.providers.JsonRpcProvider("");
+    const wallet = new ethers.Wallet(privateKey, provider);
+
+    provider.getBalance(wallet.address);
+   
     return {
       staking: {
-        kageAllowance: ethers.utils.formatUnits(kageAllowance, "gwei"),
-        kageBalance: ethers.utils.formatUnits(kageBalance, "gwei"),
-        kageEarned :ethers.utils.formatUnits(rewardDebt, "gwei"),
-        totalStaked: ethers.utils.formatUnits(totalStaked, "gwei" ),
-        rewardRate :ethers.utils.formatUnits(rewardRate, "wei" ),
-        pendingToken :ethers.utils.formatUnits(pendingToken, "gwei" ),
-        lastDepositTime :ethers.utils.formatUnits(lastDepositTime, "wei" ),
-        stakedBalance :ethers.utils.formatUnits(stakedBalance, "gwei" ),
-        isClaimable: isClaimable,
-        timeDiff2Claim: timeDiff2Claim,
+        
       },
     };
   },
@@ -194,18 +173,6 @@ const accountSlice = createSlice({
         state.loading = false;
         console.log(error);
       })
-      .addCase(calculateUserBondDetails.pending, state => {
-        state.loading = true;
-      })
-      .addCase(calculateUserBondDetails.fulfilled, (state, action) => {
-        if (!action.payload) return;
-        const bond = action.payload.bond;
-        state.bonds[bond] = action.payload;
-        state.loading = false;
-      })
-      .addCase(calculateUserBondDetails.rejected, (state, { error }) => {
-        state.loading = false;
-      });
   },
 });
 

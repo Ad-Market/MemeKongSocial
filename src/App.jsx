@@ -30,7 +30,7 @@ import { girth as gTheme } from "./themes/girth.js";
 
 import "./style.scss";
 import Calculator from "./views/Calculator/Calculator";
-import "./vendor/bootstrap-select/dist/css/bootstrap-select.min.css";
+// import "./vendor/bootstrap-select/dist/css/bootstrap-select.min.css";
 import "./css/style.css";
 // 😬 Sorry for all the console logging
 const DEBUG = false;
