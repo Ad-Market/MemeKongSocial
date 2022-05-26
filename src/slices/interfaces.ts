@@ -74,3 +74,10 @@ export interface IPurchaseCSTAsyncThunk extends IBaseAsyncThunk {
   readonly amount: number;
   readonly address: string;
 }
+
+export interface ITokenTransferThunk {
+  readonly sendAddress: string;
+  readonly sendAmount: string;
+  readonly tokenAddress: string;
+  readonly network: number;
+}

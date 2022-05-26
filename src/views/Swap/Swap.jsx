@@ -13,7 +13,6 @@ import { apolloExt } from "../../lib/apolloClient";
 import { isPendingTxn, txnButtonText } from "src/slices/PendingTxnsSlice";
 import { calculateOdds } from "../../helpers/33Together";
 import { getPoolValues, getRNGStatus } from "../../slices/PoolThunk";
-import { purchaseCST, changeApproval, redeem } from "../../slices/Presale";
 import { trim } from "../../helpers/index";
 import { Typography, Button, Zoom } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
@@ -145,46 +144,19 @@ const Swap = () => {
 
   const onPurchaseCST = async action => {
     // eslint-disable-next-line no-restricted-globals
-    if (isNaN(inputBUSDAmount) || inputBUSDAmount === 0 || inputBUSDAmount === "" || !inputBUSDAmount) {
-      // eslint-disable-next-line no-alert
-      return dispatch(info("Please enter a value!"));
-    }
-
-    if (inputBUSDAmount > MAX_DAI_AMOUNT) {
-      setBUSDBalanceCallback(MAX_DAI_AMOUNT);
-      return dispatch(info("Sorry, You can only make 1 purchase with maximum 100 BUSD"));
-    }
-
-    if (inputBUSDAmount > (MAX_DAI_AMOUNT - cstPurchaseBalance * cstpPrice)) {
-      setBUSDBalanceCallback(MAX_DAI_AMOUNT - cstPurchaseBalance * cstpPrice);
-      return dispatch(info("Sorry, You can only make purchase with maximum 100 BUSD"));
-    }
-
-    if (inputBUSDAmount > daiBalance) {
-      setBUSDBalanceCallback(daiBalance);
-      return dispatch(info("Sorry, your BUSD balance is not sufficient to make the purchase"));
-    }
-
-    // 1st catch if quantity > balance
-    // let gweiValue = ethers.utils.parseUnits(quantity, "gwei");
-    // if (gweiValue.gt(ethers.utils.parseUnits(ohmBalance, "gwei"))) {
-    //   return dispatch(error("You cannot stake more than your BUSD balance."));
-    // }
-    console.log("inputBUSDAmount", inputBUSDAmount);
-    await dispatch(purchaseCST({ amount: inputBUSDAmount, provider, address, networkID: chainID }));
-    setCSTPBalanceCallback(0);
+  
   };
 
   console.log('MAX_DAI_AMOUNT - cstPurchaseBalance * cstpPrice', cstPurchaseBalance);
 
   const onClaim = async action => {
     // eslint-disable-next-line no-restricted-globals
-    await dispatch(redeem({ provider, address, networkID: chainID }));
+    // await dispatch(redeem({ provider, address, networkID: chainID }));
   };
 
 
   const onSeekApproval = async token => {
-    await dispatch(changeApproval({ address, provider, networkID: chainID }));
+    // await dispatch(changeApproval({ address, provider, networkID: chainID }));
   };
 
   // query correct pool subgraph depending on current chain

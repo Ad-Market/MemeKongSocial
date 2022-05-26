@@ -22,7 +22,7 @@ export default function NetworkSelect() {
   return <div className="select-container">
     <Select
       labelId="demo-simple-select-label"
-      value={1}
+      value={2}
       labelWidth={0}
       style={{ border: "2px !important", width: "200px" }}
     >
@@ -38,7 +38,7 @@ export default function NetworkSelect() {
       <MenuItem value={2}>
         <div className="menu-item">
           <img src={binance} width="35px" height="35px" className="network-icon" />
-          <span>Biance Mainnet</span>
+          <span>Biance Testnet</span>
         </div>
       </MenuItem>
       <MenuItem value={3}>

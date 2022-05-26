@@ -13,7 +13,7 @@ import { apolloExt } from "../../lib/apolloClient";
 import { isPendingTxn, txnButtonText } from "src/slices/PendingTxnsSlice";
 import { calculateOdds } from "../../helpers/33Together";
 import { getPoolValues, getRNGStatus } from "../../slices/PoolThunk";
-import { purchaseCST, changeApproval, redeem } from "../../slices/Presale";
+import { purchaseCST, changeApproval, redeem } from "../../slices/Wallet";
 import { trim } from "../../helpers/index";
 import { Typography, Button, Zoom } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";

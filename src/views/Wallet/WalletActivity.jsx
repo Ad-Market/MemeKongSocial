@@ -60,19 +60,24 @@ export default function WalletActivity({ privateKey }) {
   const [walletAddress, setWalletAddress] = useState("");
   const [open, setOpen] = useState(false);
   const [isLoad] = useState(false);
-  const [windowId, setWindowId] = useState(1);
+  const [windowId, setWindowId] = useState(0);
+  const [selectedToken, setToken] = useState({});
 
   const [tooltipText, setTooltipText] = useState('Copy to Clipboard');
-  
-  const kageBalance = useSelector(state => {
-    return state.account.staking && state.account.staking.kageBalance;
-  });
 
   const stakedBalance = useSelector(state => {
     return state.account.staking && state.account.staking.stakedBalance;
   });
 
+  const nativeBalance = useSelector(state => {
+    return state.account.balances && state.account.balances.nativeBalance;
+  });
 
+  const tokenBalances = useSelector(state => {
+    return state.account.balances && state.account.balances.tokenBalances;
+  });
+
+  console.log("Token List", tokenBalances);
   let modalButton = [];
 
   modalButton.push(
@@ -90,21 +95,13 @@ export default function WalletActivity({ privateKey }) {
       console.log(e);
     }
   }, [isLoad]);
-  const copyToClipboard = (text) => {
-    console.log('text', text)
-    var textField = document.createElement('textarea')
-    textField.innerText = text
-    document.body.appendChild(textField)
-    textField.select()
-    document.execCommand('copy')
-    textField.remove()
+
+  const tokenSend = (token) => {
+    setToken(token);
+    setWindowId(1);
   }
 
   const copyWalletAddress = async () => {
-
-
-    // copyToClipboard("Asdfasdf");
-
     try {
       await navigator.clipboard.writeText(walletAddress);
       console.log('Text or Page URL copied');
@@ -166,7 +163,7 @@ export default function WalletActivity({ privateKey }) {
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <div className="stake-apy">
                   <Typography variant="h3" style={{ color: "#965E96", fontWeight: "bold" }}>
-                    18.004 ETH
+                    {nativeBalance} ETH
                   </Typography>
                 </div>
               </Grid>
@@ -192,12 +189,11 @@ export default function WalletActivity({ privateKey }) {
             <Box className="stake-action-row " display="flex" alignItems="center">
               <TabPanel value={view} index={0} className="wallet-tab-panel">
                 <div className="tab-body-container">
-                  <TokenBalance name="USDC" balance="25.00" setWindowId={setWindowId} />
-                  <TokenBalance name="BUSD" balance="25.00" setWindowId={setWindowId} />
-                  <TokenBalance name="USDT" balance="25.00" setWindowId={setWindowId} />
-                  <TokenBalance name="ASDT" balance="25.00" setWindowId={setWindowId} />
-                  <TokenBalance name="TRNX" balance="25.00" setWindowId={setWindowId} />
-                  <TokenBalance name="WBNB" balance="25.00" setWindowId={setWindowId} />
+                  {
+                    tokenBalances && tokenBalances.map((item, index) => {
+                      return <TokenBalance key={index} token={item} name={item.symbol} balance={item.balance} decimals={item.decimals} tokenSend={tokenSend} />    
+                    })
+                  }
                 </div>
               </TabPanel>
               <TabPanel value={view} index={1} className="wallet-tab-panel">
@@ -221,7 +217,7 @@ export default function WalletActivity({ privateKey }) {
 
   let windowArray = [];
   windowArray.push(<BalanceListView setWindowId={setWindowId} />);
-  windowArray.push(<TokenSendView setWindowId={setWindowId} />);
+  windowArray.push(<TokenSendView setWindowId={setWindowId} token={selectedToken} />);
 
   return (
     <div id="stake-view">

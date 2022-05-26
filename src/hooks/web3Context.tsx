@@ -70,7 +70,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
 
   const [uri, setUri] = useState(getMainnetURI());
 
-  const [provider, setProvider] = useState<JsonRpcProvider>(new StaticJsonRpcProvider('https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/eth/mainnet'));
+  const [provider, setProvider] = useState<JsonRpcProvider>(new StaticJsonRpcProvider(''));
   // const [provider, setProvider] = useState<JsonRpcProvider>(new StaticJsonRpcProvider("https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/bsc/testnet"));
 
   const [web3Modal, setWeb3Modal] = useState<Web3Modal>(
@@ -84,7 +84,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
             rpc: {
               56: getMainnetURI(),
               97 : "https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/bsc/testnet",
-              1 :"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/eth/mainnet",
+              1 :"",
               4: getTestnetURI(),
             },
           },

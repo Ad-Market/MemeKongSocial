@@ -1,9 +1,10 @@
 import { ethers } from "ethers";
+import axios from 'axios';
+
 import { addresses } from "../constants";
 import { abi as ierc20Abi } from "../abi/IERC20.json";
 import { abi as kageStakingAbi } from "../abi/KageStaking.json";
-import { BigNumber} from 'bignumber.js';
-
+import { BigNumber } from 'bignumber.js';
 import { setAll } from "../helpers";
 
 import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit";
@@ -51,19 +52,34 @@ export const loadAccountDetails = createAsyncThunk(
   "account/loadAccountDetails",
   async () => {
 
-    let nativeBalance = 0;
+    let nativeBalance = null;
     let network = 0;
     let walletAddress = 0;
+    let tokenList = null;
+    let url = null;
+    // "ether":"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/eth/rinkeby",
+    // "bsc":"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/bsc/testnet",
+    // "polygon":"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/polygon/mumbai"
 
-    const privateKey = localStorage.getItem("private_key");
-    const provider = new ethers.providers.JsonRpcProvider("");
+    const privateKey: string = localStorage.getItem("private_key");
+    const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/2064af17cd990c99c2c0ed5d/bsc/testnet");
     const wallet = new ethers.Wallet(privateKey, provider);
 
-    provider.getBalance(wallet.address);
-   
+    nativeBalance = await provider.getBalance(wallet.address);
+
+    if (network == 0)
+      url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x61";
+
+    const res = await axios.get(url, {
+      headers: { "X-API-Key": "4SmDI5YhpMZtPebTPaSf5pXZ9NgPpNw1PyJKqHNQhkDG2o11WdW3m9IZTeTUqKBm" },
+    });
+
+    console.log(res.data);
+    
     return {
-      staking: {
-        
+      balances: {
+        nativeBalance: ethers.utils.formatEther(nativeBalance),
+        tokenBalances: res.data,
       },
     };
   },
@@ -105,7 +121,7 @@ export const calculateUserBondDetails = createAsyncThunk(
     pendingPayout = await bondContract.pendingPayoutFor(address);
 
     let allowance,
-    balance = 0;
+      balance = 0;
     allowance = await reserveContract.allowance(address, bond.getAddressForBond(networkID));
     balance = await reserveContract.balanceOf(address);
     // formatEthers takes BigNumber => String

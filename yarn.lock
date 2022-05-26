@@ -12842,6 +12842,15 @@
   "integrity" "sha512-JHK7WM4nA8M28CJ/PXlJI/yjg61TlhdsM8BAD5tvWDEO0uT9iFpU671SGl43TEcdPmlytB7nc95PzWIFYTI4/w=="
   "version" "2.2.0"
 
+"react-spinner-overlay@^0.1.33":
+  "integrity" "sha512-G5o2U4Y65yOUZtDGN7lpjLtWwv0979Y/QmBljwpTguv8s5bGd90pXwSLJIV89Tfkx47ugYQz4jfyKTunthxh0g=="
+  "resolved" "https://registry.npmjs.org/react-spinner-overlay/-/react-spinner-overlay-0.1.33.tgz"
+  "version" "0.1.33"
+  dependencies:
+    "react" "^17.0.2"
+    "react-dom" "^17.0.2"
+    "typescript" "^4.1.2"
+
 "react-spring-lightbox@^1.6.0":
   "integrity" "sha512-ZKAkhVFcYEnTpB8tv0ahRsSveInSynKTMcau8eVZN+GrFAuF7ar8lYkN4ltzNXr0txWmz1t4NNopNGBoHZTsyg=="
   "version" "1.6.0"
@@ -15057,7 +15066,7 @@
   "integrity" "sha512-bna6Yi1pRznoo6Bz1cE6btB/Yy8Xywytyfrzu/wc+NFW3ZF0I+2iCGImhBsoYYCOWuICtRO4yHcnDlzgo1AdNg=="
   "version" "5.1.0"
 
-"typescript@^3.2.1 || ^4", "typescript@^4.6.4", "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta":
+"typescript@^3.2.1 || ^4", "typescript@^4.1.2", "typescript@^4.6.4", "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta":
   "integrity" "sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg=="
   "version" "4.6.4"
 
