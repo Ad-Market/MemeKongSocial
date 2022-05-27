@@ -163,20 +163,6 @@ function NavContent() {
                   State
                 </Typography>
               </Link>
-              <Link
-                component={NavLink}
-                id="presale-nav"
-                to="#"
-                isActive={(match, location) => {
-                  return checkPage(match, location, "Presale");
-                }}
-                className={`button-dapp-menu ${isActive ? "active" : ""}`}
-              >
-                <Typography variant="h6">
-                  <SvgIcon color="primary" component={WrapIcon} />
-                  Setting
-                </Typography>
-              </Link>
               {/* <Link
                 component={NavLink}
                 id="presale-nav"
