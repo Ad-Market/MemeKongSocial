@@ -163,7 +163,7 @@ export default function WalletActivity({ privateKey }) {
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <div className="stake-apy">
                   <Typography variant="h3" style={{ color: "#965E96", fontWeight: "bold" }}>
-                    {nativeBalance} ETH
+                    {nativeBalance} BNB
                   </Typography>
                 </div>
               </Grid>

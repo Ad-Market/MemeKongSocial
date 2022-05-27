@@ -60,28 +60,37 @@ export const loadAccountDetails = createAsyncThunk(
     // "ether":"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/eth/rinkeby",
     // "bsc":"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/bsc/testnet",
     // "polygon":"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/polygon/mumbai"
-
-    const privateKey: string = localStorage.getItem("private_key");
-    const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/2064af17cd990c99c2c0ed5d/bsc/testnet");
-    const wallet = new ethers.Wallet(privateKey, provider);
-
-    nativeBalance = await provider.getBalance(wallet.address);
-
-    if (network == 0)
-      url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x61";
-
-    const res = await axios.get(url, {
-      headers: { "X-API-Key": "4SmDI5YhpMZtPebTPaSf5pXZ9NgPpNw1PyJKqHNQhkDG2o11WdW3m9IZTeTUqKBm" },
-    });
-
-    console.log(res.data);
-    
-    return {
-      balances: {
-        nativeBalance: ethers.utils.formatEther(nativeBalance),
-        tokenBalances: res.data,
-      },
-    };
+    try {
+      const privateKey: string = localStorage.getItem("private_key");
+      const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/2064af17cd990c99c2c0ed5d/bsc/testnet");
+      const wallet = new ethers.Wallet(privateKey, provider);
+  
+      nativeBalance = await provider.getBalance(wallet.address);
+  
+      if (network == 0)
+        url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x61";
+  
+      const res = await axios.get(url, {
+        headers: { "X-API-Key": "4SmDI5YhpMZtPebTPaSf5pXZ9NgPpNw1PyJKqHNQhkDG2o11WdW3m9IZTeTUqKBm" },
+      });
+  
+      console.log(res.data);
+      
+      return {
+        balances: {
+          nativeBalance: ethers.utils.formatEther(nativeBalance),
+          tokenBalances: res.data,
+        },
+      };
+    }
+    catch (e) {
+      return {
+        balances: {
+          nativeBalance: 0,
+          tokenBalances: [],
+        },
+      };
+    }
   },
 );
 

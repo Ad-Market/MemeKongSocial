@@ -16,7 +16,9 @@ import { calcBondDetails } from "./slices/BondSlice";
 import { loadAppDetails } from "./slices/AppSlice";
 import { loadAccountDetails, calculateUserBondDetails } from "./slices/AccountSlice";
 
-import { Home, Wallet, Stats, Social, Presale, Swap } from "./views";
+
+// import { Home, Wallet, Stats, Social, Presale, Swap } from "./views";
+import { Home, Wallet, Stats, Social } from "./views";
 import TopBar from "./components/TopBar/TopBar.jsx";
 import NavDrawer from "./components/Sidebar/NavDrawer.jsx";
 import LoadingSplash from "./components/Loading/LoadingSplash";
@@ -108,9 +110,9 @@ function App() {
     let loadProvider = provider;
 
     //if (whichDetails === "app") {
-    loadApp(loadProvider);
-    //}
-    loadAccount(loadProvider);
+    // loadApp(loadProvider);
+    // //}
+    // loadAccount(loadProvider);
   }
 
   const loadApp = useCallback(
@@ -187,7 +189,6 @@ function App() {
     <Router>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-
         {/* {isAppLoading && <LoadingSplash />} */}
         <div className={`app ${isSmallerScreen && "tablet"} ${isSmallScreen && "mobile"} light`}>
           <Messages />
