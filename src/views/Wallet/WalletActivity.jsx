@@ -143,35 +143,6 @@ export default function WalletActivity({ privateKey, network }) {
       .toFixed(4),
   );
 
-  const SwapAlertDialog = ({ setOpen, setEmergency }) => {
-
-    return (
-      <div style={{ background: "#ff0 !important" }}>
-        <Dialog
-          open={open}
-          onClose={() => { setOpen(false) }}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title" style={{ textAlign: "center" }}>
-            <span style={{ color: "#fff", fontSize: "22px" }}>Select UnStaking Option</span>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              <Typography style={{ color: "#fff", fontSize: "20px" }}>- <span style={{ color: "yellow" }}>UnStake</span> tokens will allow you get Meme Kong tokens 7 days later.</Typography>
-              <Typography style={{ color: "#fff", fontSize: "20px", paddingTop: "10px" }}>- <span style={{ color: "yellow" }}>Emergency Withdraw </span> will allow you get Meme Kong tokens immediately with 5% fee.</Typography>
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button variant="outlined" color="secondary" onClick={() => { setOpen(false); }}>
-              Cancel
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  };
-
   const TokenActivityListView = () => {
     const NativeCurrencySymbols = ["ETH", "BNB", "MATIC"];
 

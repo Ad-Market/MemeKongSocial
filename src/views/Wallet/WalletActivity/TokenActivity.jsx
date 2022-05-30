@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import {ethers} from 'ethers';
 
+import { shorten } from "../../../helpers";
+
 import './TokenActivity.scss';
 
 
@@ -50,7 +52,7 @@ export default function TokenActivity({ name, history, address }) {
             {isReceived ? 'Received' : 'Sent'}
           </div>
           <div className="transaction-info">
-            {isReceived ? 'From:' + history.from_address : 'To:' + history.to_address}
+            {isReceived ? 'From:' + shorten(history.from_address) : 'To:' + shorten(history.to_address)}
           </div>
         </div>
       </div>
