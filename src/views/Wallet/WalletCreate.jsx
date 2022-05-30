@@ -91,7 +91,6 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
               Did you check mnemonic?
             </div>
             <div className="action-button">
-              <div style={{ width: "100px" }} />
               <button className="ok" onClick={handleOK}>Create</button>
               <button className="cancel" onClick={e => setOpenConfirmDialog(false)}>Cancel</button>
             </div>

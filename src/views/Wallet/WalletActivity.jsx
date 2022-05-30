@@ -203,8 +203,8 @@ export default function WalletActivity({ privateKey, network }) {
               onChange={changeView}
               aria-label="stake tabs"
             >
-              <Tab label="Assets" {...a11yProps(0)} style={{ width: "200px" }} />
-              <Tab label="Activity" {...a11yProps(1)} style={{ width: "200px" }} />
+              <Tab label="Assets" {...a11yProps(0)} style={{ width: "150px" }} />
+              <Tab label="Activity" {...a11yProps(1)} style={{ width: "150px" }} />
             </Tabs>
             <Box className="stake-action-row " display="flex" alignItems="center">
               <TabPanel value={view} index={0} className="wallet-tab-panel">
@@ -247,15 +247,21 @@ export default function WalletActivity({ privateKey, network }) {
       <Zoom in={true} onEntered={() => setZoomed(true)}>
         <Paper className={`ohm-card`} style={{ borderRadius: "10px", background: "rgba(14, 1, 19, 0.8)", boxShadow: "0px 6px 6px rgba(255, 255, 255, 0.2)" }}>
           <Grid container direction="column" spacing={2}>
-            <Grid item>
               <div className="card-header">
-                <Typography variant="h3">MKONG Wallet </Typography>
-                <Tooltip title={tooltipText}>
-                  <Typography variant="h5" style={{ color: "#fa0", cursor: "pointer" }} onClick={copyWalletAddress}>{shorten(walletAddress)}</Typography>
-                </Tooltip>
-                <NetworkSelect onChange={onChangeNetwork} value={networkId} />
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={12} lg={4} style={{alignItems:"center", display:"flex", justifyContent:"center"}}>
+                  <Typography variant="h3">MKONG Wallet </Typography>
+                  </Grid>
+                  <Grid item xs={5} sm={5} md={5} lg={4} style={{alignItems:"center", display:"flex"}}>
+                  <Tooltip title={tooltipText}>
+                    <Typography variant="h5" style={{ color: "#fa0", cursor: "pointer" }} onClick={copyWalletAddress}>{shorten(walletAddress)}</Typography>
+                  </Tooltip>
+                  </Grid>
+                  <Grid item xs={7} sm={7} md={7} lg={4}>
+                  <NetworkSelect onChange={onChangeNetwork} value={networkId} />
+                  </Grid>
+                </Grid>
               </div>
-            </Grid>
             {windowArray[windowId]}
           </Grid>
         </Paper>

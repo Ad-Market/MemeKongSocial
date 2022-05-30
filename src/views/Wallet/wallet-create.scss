@@ -4,7 +4,6 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-
   // border: 1px solid #6eb16e85;
 
 
@@ -14,6 +13,11 @@
     border-radius: 10px;
     min-height: 400px;
     margin-top: 80px;
+    width: 50%;
+
+    @media (max-width: 800px) {
+      width: 95%;
+    }
 
     .mkong-wallet {
       margin-top: 50px;
@@ -30,6 +34,9 @@
       border: 2px solid rgba(255, 255, 255, 0.2);
       padding-bottom: 20px;
       margin: 50px 100px;
+      @media (max-width: 800px) {
+        margin: 10px 10px;
+      }
     }
 
     .mnemonic-window {
@@ -37,6 +44,10 @@
       justify-content: center;
       margin-top: 20px;
       padding: 50px;
+
+      @media (max-width: 800px) {
+        padding: 10px;
+      }
 
       .mnemoiic-word {
         width: 100%;
@@ -61,8 +72,7 @@
 
     .welcome-text {
       margin-top: 60px;
-      margin-left: 200px;
-      margin-right: 200px;
+      text-align: center;
       font-family: 'Century Gothic';
       font-style: normal;
       font-weight: 400;
@@ -99,6 +109,11 @@
         margin-left: 100px;
         margin-right: 100px;
         flex-direction: column;
+
+        @media (max-width: 800px) {
+          margin-left: 50px;
+          margin-right: 50px;
+        }
 
         .button-icon {
           width: 18px;
@@ -388,9 +403,13 @@
 
 .dialog {
   width: 500px;
-
+  padding: 10px 30px;
   background: rgba(28, 7, 44, 0.7);
   border: 2px solid rgba(255, 255, 255, 0.2);
+
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 
   .title {
     font-family: 'Century Gothic';
@@ -410,15 +429,18 @@
     font-size: 20px;
     line-height: 29px;
     margin-top: 20px;
-    margin-left: 40px;
   }
 
   .action-button {
     color: white;
     display: flex;
-    justify-content: space-around;
+    justify-content: end;
     margin-top: 40px;
     margin-bottom: 30px;
+
+    @media (max-width: 800px) {
+
+    }
 
     .ok {
       background: rgba(246, 153, 44, 0.8);
@@ -441,6 +463,7 @@
       color: white;
       width: 150px;
       height: 40px;
+      margin-left: 10px;
       
       &:hover {
         background: rgba(246, 153, 44, 0.8);
