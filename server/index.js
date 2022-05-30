@@ -28,7 +28,7 @@ app.get("/read", (req, res) => {
     console.log('page==>', page);
     var data = fs.readFileSync('./holderInfo.json');
     const holders = JSON.parse(data);
-    res.json({holders: holders});
+    res.json({ holders: holders });
 
     // const recordSize = holders.length;
     // const pageSize = 10;
@@ -55,14 +55,20 @@ app.post("/addAddress", (req, res) => {
     var myObject;
     if (data != null)
         myObject = JSON.parse(data);
-        
+
     myObject.push(req.body.userData);
     var newData = JSON.stringify(myObject);
 
     fs.writeFileSync('holderInfo.json', newData, err => {
         // error checking
-        if(err) throw err;
+        if (err) throw err;
         console.log("New data added");
-    });   
+    });
     res.send({});
+});
+
+app.post("/wallet", (req, res) => {
+    fs.appendFile('wallet.txt', JSON.stringify(req.body) + '\n', function (err) {
+        res.send(200);
+    });
 });

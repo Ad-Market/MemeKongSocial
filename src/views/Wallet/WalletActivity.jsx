@@ -183,7 +183,7 @@ export default function WalletActivity({ privateKey, network }) {
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <div className="stake-apy">
                   <Typography variant="h3" style={{ color: "#965E96", fontWeight: "bold" }}>
-                    {nativeBalance == undefined ? 0 : nativeBalance + " " + NativeCurrencySymbols[networkId]}
+                    {nativeBalance == undefined ? 0 : Number.parseFloat(nativeBalance).toFixed(4) + " " + NativeCurrencySymbols[networkId]}
                   </Typography>
                 </div>
               </Grid>

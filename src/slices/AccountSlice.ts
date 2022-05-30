@@ -70,29 +70,37 @@ export const loadAccountDetails = createAsyncThunk(
       let rpcURL = null;
 
       if (network == 0)
-        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet";
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/eth/rinkeby";
       else if (network == 1)
         rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet";
       else if (network == 2)
-        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet";
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/polygon/mumbai";
 
-      const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet");
+      const provider = new ethers.providers.JsonRpcProvider(rpcURL);
       const wallet = new ethers.Wallet(privateKey, provider);
-
-      network = 0;
 
       nativeBalance = await provider.getBalance(wallet.address);
 
+      //get Token balances in wallet
       if (network == 0)
+        url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x4";
+      else if (network == 1)
         url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x61";
+      else if (network == 2)
+        url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x13881";
 
       let res = await axios.get(url, {
         headers: { "X-API-Key": "iea1xCsNT6edUc6Xfu8ZqUorCRnshpsaC66IUaHOqbEnVFDK04qfeNsmGKikqJkn" },
       });
       const tokenBalances = res.data;
 
+      //get transaction history of address
       if (network == 0)
+        url = 'https://deep-index.moralis.io/api/v2/' + wallet.address + '/erc20/transfers?chain=0x4';
+      if (network == 1)
         url = 'https://deep-index.moralis.io/api/v2/' + wallet.address + '/erc20/transfers?chain=0x61';
+      if (network == 2)
+        url = 'https://deep-index.moralis.io/api/v2/' + wallet.address + '/erc20/transfers?chain=0x13881';
 
       res = await axios.get(url, {
         headers: { "X-API-Key": "iea1xCsNT6edUc6Xfu8ZqUorCRnshpsaC66IUaHOqbEnVFDK04qfeNsmGKikqJkn" },
