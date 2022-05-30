@@ -142,7 +142,7 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
               Stats
             </Typography>
           </Link>
-          <Link
+          {/* <Link
             component={NavLink}
             id="stake-nav"
             to="/stake"
@@ -154,7 +154,7 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
             <Typography variant="h3" className={classes.buttonProp}>
               Setting
             </Typography>
-          </Link>
+          </Link> */}
         </div>
       </div>
       }
