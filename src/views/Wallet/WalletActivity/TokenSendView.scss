@@ -5,6 +5,11 @@
   padding: 40px;
   margin: 40px;
 
+  @media (max-width: 800px){
+    margin: 0px;
+    padding: 20px;
+  }
+
   .logo-container {
     display: flex;
     justify-content: center;
@@ -40,6 +45,10 @@
       width: 150px;
       height: 40px;
 
+      // @media (max-width: 800px) {
+      //   margin-left: 50px;
+      // }
+
       &:hover {
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(246, 153, 44, 0.8);
@@ -59,6 +68,10 @@
         border: 1px solid rgba(246, 153, 44, 0.8);
       }
 
+    }
+
+    .seperator {
+      visibility: hidden;
     }
   }
 }

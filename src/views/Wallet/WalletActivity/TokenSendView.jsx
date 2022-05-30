@@ -157,6 +157,7 @@ export default function ({ setWindowId, token }) {
             >
               Go Back
             </button>
+            <span className="seperator">....</span>
             <button
               id="wallet-button"
               variant="contained"
