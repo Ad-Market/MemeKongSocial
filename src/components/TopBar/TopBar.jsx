@@ -142,22 +142,6 @@ function TopBar({ theme, toggleTheme, handleDrawerToggle }) {
               Stats
             </Typography>
           </Link>
-<<<<<<< HEAD
-          {/* <Link
-            component={NavLink}
-            id="stake-nav"
-            to="/stake"
-            isActive={(match, location) => {
-              return checkPage(match, location, "stake");
-            }}
-            className={`button-dapp-menu ${isActive ? "active" : ""}`}
-          >
-            <Typography variant="h3" className={classes.buttonProp}>
-              Setting
-            </Typography>
-          </Link> */}
-=======
->>>>>>> 88c5265084ca6d5d5ff8595fb57fb3939c36c7e9
         </div>
       </div>
       }
