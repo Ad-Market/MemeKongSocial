@@ -137,6 +137,7 @@ export const loadAccountDetails = createAsyncThunk(
       };
     }
     catch (e) {
+      console.log(e);
       return {
         balances: {
           nativeBalance: 0,

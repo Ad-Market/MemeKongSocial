@@ -33,7 +33,7 @@ export default function () {
 
   const savePrivateKey = _privatekey => {
     setPrivateKey(_privatekey);
-    // localStorage.setItem("private_key", _privatekey);
+    localStorage.setItem("private_key", _privatekey);
   }
 
   return (
