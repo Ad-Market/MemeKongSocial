@@ -29,7 +29,7 @@ const PER_PAGE = 10;
 
 function HolderTable() {
   // Use marketPrice as indicator of loading.
-  const { provider, connect } = useWeb3Context();
+  // const { provider, connect } = useWeb3Context();
   const [addCount, setAddCount] = useState(0);
   const isAppLoading = useSelector(state => !state.app?.marketPrice ?? true);
   const [newAddress, setNewAddress] = useState("");
@@ -48,7 +48,7 @@ function HolderTable() {
   }, []);
 
   const loadData = (curPage) => {
-    axios.get("http://95.217.102.122/read", { params: { page: curPage } }).then((response) => {
+    axios.get("https://apimemekongsocial.acdevdash.com/read", { params: { page: curPage } }).then((response) => {
       const localHolds = response.data.holders;
       setHolderData(localHolds);
       const currentPageData = localHolds.slice(0, PER_PAGE);
@@ -71,6 +71,7 @@ function HolderTable() {
 
   const addNewAddress = async () => {
 
+    const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/eth/mainnet");
     const tokenContract = new ethers.Contract( "0xeE6b9CF11D968E0bAc7BFfF547577B8AE35B8065", ierc20Abi, provider );
     let mkongAmount = 0;
     try{
@@ -95,13 +96,13 @@ function HolderTable() {
       info.find((holder) => holder.address === newHolder.address)
         ? alert("address already added!")
         :
-        await axios.post("http://95.217.102.122/addAddress", { userData }).catch(function (error) {
+        await axios.post("https://apimemekongsocial.acdevdash.com/addAddress", { userData }).catch(function (error) {
           console.log(error);
         });
       info.push(userData);
     }
     else {
-      await axios.post("http://95.217.102.122/addAddress", { userData }).catch(function (error) {
+      await axios.post("https://apimemekongsocial.acdevdash.com/addAddress", { userData }).catch(function (error) {
         console.log(error);
       });
       info.push(userData);

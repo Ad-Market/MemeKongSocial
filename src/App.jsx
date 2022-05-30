@@ -109,10 +109,10 @@ function App() {
     // network. To actually test rinkeby, change setChainID equal to 4 before testing.
     let loadProvider = provider;
 
-    //if (whichDetails === "app") {
-    // loadApp(loadProvider);
-    // //}
-    // loadAccount(loadProvider);
+    if (whichDetails === "app") {
+    loadApp(loadProvider);
+    }
+    loadAccount(loadProvider);
   }
 
   const loadApp = useCallback(
@@ -130,27 +130,6 @@ function App() {
     [connected],
   );
 
-  // The next 3 useEffects handle initializing API Loads AFTER wallet is checked
-  //
-  // this useEffect checks Wallet Connection & then sets State for reload...
-  // ... we don't try to fire Api Calls on initial load because web3Context is not set yet
-  // ... if we don't wait we'll ALWAYS fire API calls via JsonRpc because provider has not
-  // ... been reloaded within App.
-  useEffect(() => {
-    // if (hasCachedProvider()) {
-    //   // then user DOES have a wallet
-    //   connect().then(() => {
-    //     setWalletChecked(true);
-    //   });
-    // } else {
-    //   // then user DOES NOT have a wallet
-    //   setWalletChecked(true);
-    // }
-
-    // // We want to ensure that we are storing the UTM parameters for later, even if the user follows links
-    // storeQueryParameters();
-  }, []);
-
   // this useEffect fires on state change from above. It will ALWAYS fire AFTER
   useEffect(() => {
     // don't load ANY details until wallet is Checked
@@ -158,14 +137,6 @@ function App() {
     loadDetails("app");
     // }
   }, [walletChecked]);
-
-  // this useEffect picks up any time a user Connects via the button
-  useEffect(() => {
-    // don't load ANY details until wallet is Connected
-    // if (connected) {
-    //   loadDetails("account");
-    // }
-  }, [connected]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

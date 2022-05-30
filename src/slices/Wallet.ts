@@ -19,7 +19,7 @@ export const transferToken = createAsyncThunk(
     // "polygon":"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/polygon/mumbai"
 
     const privateKey: string = localStorage.getItem("private_key") as string;
-    const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/2064af17cd990c99c2c0ed5d/bsc/testnet");
+    const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet");
     const wallet = new ethers.Wallet(privateKey, provider);
 
     const erc20Contract = new ethers.Contract(tokenAddress, ierc20Abi, provider.getSigner(wallet.address));
