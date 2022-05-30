@@ -11,10 +11,20 @@ import WalletBackground from "../../assets/images/wallet/wallet-background.png";
 export default function () {
   const [isWalletInfoLoad, setWalletInfo] = useState(false);
   const [privateKey, setPrivateKey] = useState('');
+  const [network, setNetwork] = useState(0);
   const [isAppLoad] = useState(false);
 
   useEffect(() => {
     const _privateKey = localStorage.getItem("private_key");
+    const _network = localStorage.getItem("network");
+
+    if (_network != null) {
+      setNetwork(_network);
+    }
+    else {
+      localStorage.setItem("network", network);
+    }
+
     if(_privateKey != null) {
       setPrivateKey(_privateKey);
       setWalletInfo(true);
@@ -23,7 +33,7 @@ export default function () {
 
   const savePrivateKey = _privatekey => {
     setPrivateKey(_privatekey);
-    localStorage.setItem("private_key", _privatekey);
+    // localStorage.setItem("private_key", _privatekey);
   }
 
   return (
@@ -34,7 +44,7 @@ export default function () {
             setWalletInfo={setWalletInfo}
             savePrivateKey={savePrivateKey}
             /> :
-          <WalletActivity privateKey={privateKey} />
+          <WalletActivity privateKey={privateKey} network={network}/>
       }
     </div>
   )

@@ -174,8 +174,9 @@ export default function ({ setWindowId, token }) {
     <ConfirmAlertDialog />
     <RingSpinnerOverlay 
       loading={loading}
-      size="120"
+      size="100"
       overlayColor="#0006"
-      message={"Token Sending"}  />
+      message={<div style={{fontSize: "16px", marginTop: "10px"}}>Token Sending...</div>}
+      />
   </div>
 }

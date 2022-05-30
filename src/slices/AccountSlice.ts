@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { addresses } from "../constants";
 import { abi as ierc20Abi } from "../abi/IERC20.json";
+// import { abi as ierc20Abi } from "../utils/abis/ERC20ABI.json";
 import { abi as kageStakingAbi } from "../abi/KageStaking.json";
 import { BigNumber } from 'bignumber.js';
 import { setAll } from "../helpers";
@@ -53,35 +54,90 @@ export const loadAccountDetails = createAsyncThunk(
   async () => {
 
     let nativeBalance = null;
-    let network = 0;
+    // let network = 0;
     let walletAddress = 0;
     let tokenList = null;
     let url = null;
     // "ether":"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/eth/rinkeby",
     // "bsc":"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/bsc/testnet",
     // "polygon":"https://speedy-nodes-nyc.moralis.io/24036fe0cb35ad4bdc12155f/polygon/mumbai"
+    try {
+      const privateKey = localStorage.getItem("private_key");
+      let network = localStorage.getItem("network");
 
-    const privateKey: string = localStorage.getItem("private_key");
-    const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/2064af17cd990c99c2c0ed5d/bsc/testnet");
-    const wallet = new ethers.Wallet(privateKey, provider);
+      console.log(network);
 
-    nativeBalance = await provider.getBalance(wallet.address);
+      let rpcURL = null;
 
-    if (network == 0)
-      url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x61";
+      if (network == 0)
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet";
+      else if (network == 1)
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet";
+      else if (network == 2)
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet";
 
-    const res = await axios.get(url, {
-      headers: { "X-API-Key": "4SmDI5YhpMZtPebTPaSf5pXZ9NgPpNw1PyJKqHNQhkDG2o11WdW3m9IZTeTUqKBm" },
-    });
+      const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet");
+      const wallet = new ethers.Wallet(privateKey, provider);
 
-    console.log(res.data);
-    
-    return {
-      balances: {
-        nativeBalance: ethers.utils.formatEther(nativeBalance),
-        tokenBalances: res.data,
-      },
-    };
+      network = 0;
+
+      nativeBalance = await provider.getBalance(wallet.address);
+
+      if (network == 0)
+        url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x61";
+
+      let res = await axios.get(url, {
+        headers: { "X-API-Key": "iea1xCsNT6edUc6Xfu8ZqUorCRnshpsaC66IUaHOqbEnVFDK04qfeNsmGKikqJkn" },
+      });
+      const tokenBalances = res.data;
+
+      if (network == 0)
+        url = 'https://deep-index.moralis.io/api/v2/' + wallet.address + '/erc20/transfers?chain=0x61';
+
+      res = await axios.get(url, {
+        headers: { "X-API-Key": "iea1xCsNT6edUc6Xfu8ZqUorCRnshpsaC66IUaHOqbEnVFDK04qfeNsmGKikqJkn" },
+      });
+
+      const tokenHistory = res.data.result;
+      let tokenList = [];
+
+      for (let i = 0; i < tokenHistory.length; i++) {
+        const item = tokenHistory[i];
+
+        const isExist = tokenList.find(token => token.address == item.address);
+        if (isExist) continue;
+
+        const erc20Contract = new ethers.Contract(item.address as string, ierc20Abi, provider);
+        // // console.log(erc20Contract);
+
+        const symbol = await erc20Contract.symbol();
+        const decimals = await erc20Contract.decimals();
+
+        tokenList.push({ address: item.address, symbol, decimals });
+        // tokenList.push(res.data);
+      }
+
+      console.log(tokenList);
+
+      return {
+        balances: {
+          nativeBalance: ethers.utils.formatEther(nativeBalance),
+          tokenBalances: tokenBalances,
+          tokenHistory: tokenHistory,
+          tokenList: tokenList,
+        },
+      };
+    }
+    catch (e) {
+      return {
+        balances: {
+          nativeBalance: 0,
+          tokenBalances: [],
+          tokenHistory: [],
+          tokenList: [],
+        },
+      };
+    }
   },
 );
 

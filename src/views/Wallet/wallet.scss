@@ -16,30 +16,56 @@
     // font-size: 1.7rem !important;
   }
 
-  @media (min-width: 1280px){
-  .MuiTab-root {
+  @media (min-width: 1280px) {
+    .MuiTab-root {
       font-size: 1.6rem;
     }
   }
 
   .stake-table-panel,
-  .wallet-tab-panel > div.MuiBox-root {
+  .wallet-tab-panel>div.MuiBox-root {
     width: 100%;
     padding: 0;
   }
 
   .tab-body-container {
     min-height: 400px;
+    max-height: 400px;
+    overflow-y: auto;
     border-style: solid;
     border: 1px solid #fff4;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 0 30px #0005;
     padding-top: 30px;
+
+    &::-webkit-scrollbar {
+      display: block !important;
+      width: 5px !important;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+      background: #ffffff14;
+      border-radius: 45px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: #512070;
+      border-radius: 24px;
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+      background: #7b5c4d;
+    }
   }
-  
+
   .mobile .wallet-tab-panel,
-  .mobile .wallet-tab-panel > div.MuiBox-root {
+  .mobile .wallet-tab-panel>div.MuiBox-root {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,12 +74,14 @@
 
   .ohm-card .header {
     min-height: 3em;
-    
+
   }
+
   .ohm-card.secondary .card-header {
     min-height: 33px !important;
     height: 20px;
   }
+
   .stake-note {
     text-align: center;
     font-style: italic;
@@ -69,6 +97,7 @@
   align-items: center;
   color: #f08080;
   line-height: 30px;
+
   svg {
     margin-right: 8px;
     color: inherit;
@@ -85,12 +114,15 @@
   padding: 0;
   text-align: center;
   margin-top: 10px;
+
   h5 {
     font-weight: 400;
   }
+
   h4 {
     font-weight: 500;
   }
+
   .stake-apy,
   .stake-tvl,
   .stake-index {
@@ -105,6 +137,7 @@
 }
 
 .mobile .stake-top-metrics {
+
   .stake-apy,
   .stake-tvl,
   .stake-index {
@@ -160,6 +193,7 @@
 
 .mobile .stake-action-row {
   flex-direction: column;
+
   [role="tabpanel"] {
     max-width: 100%;
     width: 100% !important;
@@ -195,11 +229,13 @@
   text-align: center !important;
   display: flex !important;
   justify-content: center !important;
+
   svg {
     margin-left: 4px;
     vertical-align: middle;
     font-size: 1.1em;
   }
+
   &:hover {
     svg {
       color: inherit;
@@ -221,6 +257,7 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+
     .ohm-pairs p {
       margin-bottom: 0 !important;
     }
@@ -229,14 +266,17 @@
   .pool-data {
     margin-top: 15px;
     width: 100%;
+
     .pool-data-row {
       display: flex;
       justify-content: space-between;
       line-height: 225%;
     }
   }
+
   .stake-lp-button {
     margin-top: 10px;
+
     svg {
       margin-left: 10px !important;
     }
@@ -245,12 +285,18 @@
 
 .stake-wallet-notification {
   text-align: center;
+
   .wallet-menu {
     text-align: center;
+
     .connect-button {
       max-width: 300px !important;
       min-width: 240px !important;
       margin-bottom: 15px;
     }
   }
+}
+
+.bounce-vertically-40 {
+  font-size: 26px !important;
 }

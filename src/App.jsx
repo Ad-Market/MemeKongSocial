@@ -16,7 +16,9 @@ import { calcBondDetails } from "./slices/BondSlice";
 import { loadAppDetails } from "./slices/AppSlice";
 import { loadAccountDetails, calculateUserBondDetails } from "./slices/AccountSlice";
 
-import { Home, Wallet, Stats, Social, Presale, Swap } from "./views";
+
+// import { Home, Wallet, Stats, Social, Presale, Swap } from "./views";
+import { Home, Wallet, Stats, Social } from "./views";
 import TopBar from "./components/TopBar/TopBar.jsx";
 import NavDrawer from "./components/Sidebar/NavDrawer.jsx";
 import LoadingSplash from "./components/Loading/LoadingSplash";
@@ -107,9 +109,9 @@ function App() {
     // network. To actually test rinkeby, change setChainID equal to 4 before testing.
     let loadProvider = provider;
 
-    //if (whichDetails === "app") {
+    if (whichDetails === "app") {
     loadApp(loadProvider);
-    //}
+    }
     loadAccount(loadProvider);
   }
 
@@ -128,27 +130,6 @@ function App() {
     [connected],
   );
 
-  // The next 3 useEffects handle initializing API Loads AFTER wallet is checked
-  //
-  // this useEffect checks Wallet Connection & then sets State for reload...
-  // ... we don't try to fire Api Calls on initial load because web3Context is not set yet
-  // ... if we don't wait we'll ALWAYS fire API calls via JsonRpc because provider has not
-  // ... been reloaded within App.
-  useEffect(() => {
-    // if (hasCachedProvider()) {
-    //   // then user DOES have a wallet
-    //   connect().then(() => {
-    //     setWalletChecked(true);
-    //   });
-    // } else {
-    //   // then user DOES NOT have a wallet
-    //   setWalletChecked(true);
-    // }
-
-    // // We want to ensure that we are storing the UTM parameters for later, even if the user follows links
-    // storeQueryParameters();
-  }, []);
-
   // this useEffect fires on state change from above. It will ALWAYS fire AFTER
   useEffect(() => {
     // don't load ANY details until wallet is Checked
@@ -156,14 +137,6 @@ function App() {
     loadDetails("app");
     // }
   }, [walletChecked]);
-
-  // this useEffect picks up any time a user Connects via the button
-  useEffect(() => {
-    // don't load ANY details until wallet is Connected
-    // if (connected) {
-    //   loadDetails("account");
-    // }
-  }, [connected]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -187,7 +160,6 @@ function App() {
     <Router>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-
         {/* {isAppLoading && <LoadingSplash />} */}
         <div className={`app ${isSmallerScreen && "tablet"} ${isSmallScreen && "mobile"} light`}>
           <Messages />

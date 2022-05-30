@@ -5,12 +5,7 @@ export default function TokenBalance({token, name, balance, decimals, tokenSend}
     const backColor = `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`
 
     const getBalance = (balance, decimals) => {
-        if (decimals == 18) {
-            return Number(ethers.utils.formatEther(balance)).toFixed(2);
-        }
-        else if(decimals == 9) {
-            return Number(ethers.utils.formatUnits(balance, "gwei")).toFixed(2);
-        }
+        return Number(ethers.utils.formatUnits(balance, decimals)).toFixed(2);
     }
 
     return (

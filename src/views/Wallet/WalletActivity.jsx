@@ -23,6 +23,8 @@ import {
 } from "@material-ui/core";
 import { ethers } from "ethers";
 import NewReleases from "@material-ui/icons/NewReleases";
+import { BounceLetterLoaderOverlay, LineLoaderOverlay } from 'react-spinner-overlay'
+
 import RebaseTimer from "../../components/RebaseTimer/RebaseTimer";
 import TabPanel from "../../components/TabPanel";
 import { getOhmTokenImage, getTokenImage, trim } from "../../helpers";
@@ -34,6 +36,7 @@ import { isPendingTxn, txnButtonText } from "src/slices/PendingTxnsSlice";
 import { Skeleton } from "@material-ui/lab";
 import { error } from "../../slices/MessagesSlice";
 import { shorten } from "../../helpers";
+import { loadAccountDetails } from "../../slices/AccountSlice";
 
 import ClaimTimer from "../../components/RebaseTimer/ClaimTimer";
 import NetworkSelect from "./WalletActivity/NetworkSelect";
@@ -51,7 +54,7 @@ function a11yProps(index) {
 const sOhmImg = getTokenImage("sohm");
 const ohmImg = getOhmTokenImage(16, 16);
 
-export default function WalletActivity({ privateKey }) {
+export default function WalletActivity({ privateKey, network }) {
   const dispatch = useDispatch();
   const { provider, address, connected, connect, chainID } = useWeb3Context();
 
@@ -62,6 +65,8 @@ export default function WalletActivity({ privateKey }) {
   const [isLoad] = useState(false);
   const [windowId, setWindowId] = useState(0);
   const [selectedToken, setToken] = useState({});
+  const [networkId, setNetworkId] = useState(network);
+  const [isNetworkChange, setNetworkChange] = useState(false);
 
   const [tooltipText, setTooltipText] = useState('Copy to Clipboard');
 
@@ -77,7 +82,12 @@ export default function WalletActivity({ privateKey }) {
     return state.account.balances && state.account.balances.tokenBalances;
   });
 
-  console.log("Token List", tokenBalances);
+  const tokenHistory = useSelector(state => {
+    return state.account.balances && state.account.balances.tokenHistory;
+  });
+
+  console.log('tokenHistory', tokenHistory);
+
   let modalButton = [];
 
   modalButton.push(
@@ -99,6 +109,14 @@ export default function WalletActivity({ privateKey }) {
   const tokenSend = (token) => {
     setToken(token);
     setWindowId(1);
+  }
+
+  const onChangeNetwork = async (value) => {
+    setNetworkId(value);
+    setNetworkChange(true);
+    localStorage.setItem("network", value);
+    await dispatch(loadAccountDetails());
+    setNetworkChange(false);
   }
 
   const copyWalletAddress = async () => {
@@ -154,7 +172,9 @@ export default function WalletActivity({ privateKey }) {
     );
   };
 
-  const BalanceListView = () => {
+  const TokenActivityListView = () => {
+    const NativeCurrencySymbols = ["ETH", "BNB", "MATIC"];
+
     return (
       <>
         <Grid item>
@@ -163,7 +183,7 @@ export default function WalletActivity({ privateKey }) {
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <div className="stake-apy">
                   <Typography variant="h3" style={{ color: "#965E96", fontWeight: "bold" }}>
-                    {nativeBalance} ETH
+                    {nativeBalance == undefined ? 0 : nativeBalance + " " + NativeCurrencySymbols[networkId]}
                   </Typography>
                 </div>
               </Grid>
@@ -191,15 +211,18 @@ export default function WalletActivity({ privateKey }) {
                 <div className="tab-body-container">
                   {
                     tokenBalances && tokenBalances.map((item, index) => {
-                      return <TokenBalance key={index} token={item} name={item.symbol} balance={item.balance} decimals={item.decimals} tokenSend={tokenSend} />    
+                      return <TokenBalance key={index} token={item} name={item.symbol} balance={item.balance} decimals={item.decimals} tokenSend={tokenSend} />
                     })
                   }
                 </div>
               </TabPanel>
               <TabPanel value={view} index={1} className="wallet-tab-panel">
                 <div className="tab-body-container">
-                  <TokenActivity />
-                  <TokenActivity />
+                  {
+                    tokenHistory && tokenHistory.map((item, index) => {
+                      return <TokenActivity key={index} history={item} address={walletAddress} />
+                    })
+                  }
                 </div>
               </TabPanel>
               <TabPanel value={view} index={2} className="wallet-tab-panel">
@@ -216,7 +239,7 @@ export default function WalletActivity({ privateKey }) {
   // }
 
   let windowArray = [];
-  windowArray.push(<BalanceListView setWindowId={setWindowId} />);
+  windowArray.push(<TokenActivityListView setWindowId={setWindowId} />);
   windowArray.push(<TokenSendView setWindowId={setWindowId} token={selectedToken} />);
 
   return (
@@ -230,13 +253,29 @@ export default function WalletActivity({ privateKey }) {
                 <Tooltip title={tooltipText}>
                   <Typography variant="h5" style={{ color: "#fa0", cursor: "pointer" }} onClick={copyWalletAddress}>{shorten(walletAddress)}</Typography>
                 </Tooltip>
-                <NetworkSelect />
+                <NetworkSelect onChange={onChangeNetwork} value={networkId} />
               </div>
             </Grid>
             {windowArray[windowId]}
           </Grid>
         </Paper>
       </Zoom>
+      <BounceLetterLoaderOverlay
+        loading={isNetworkChange}
+        letters="Network Switching..."
+        animationDuration={3}
+        color="#fff"
+        overlayColor="#000a"
+        style={{ fontSize: "36px" }}
+      />
+      <LineLoaderOverlay
+        loading={nativeBalance == undefined}
+        overlayColor="#000a"
+        color="#fff"
+        width={280}
+        animationDuration={3}
+        message={<div style={{ fontSize: "16px", marginTop: "10px" }}>Account Info Loading...</div>}
+      />
     </div>
   );
 }

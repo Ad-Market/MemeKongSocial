@@ -15,6 +15,7 @@ import {
   Typography,
   Zoom,
   Dialog,
+  TextField,
   DialogActions,
   DialogContent,
   DialogContentText,
@@ -39,8 +40,10 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
   const dispatch = useDispatch();
   const [mnemonic, setMnemonic] = useState('');
   const [isAppLoad, setLoadStatus] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [windowID, setWindowID] = useState(0);
+  const [importedMnemonic, setImportedMnemonic] = useState('');
+  const [mnemonicCheckText, setMnemonicCheckText] = useState('');
 
   const { provider, address, connected, connect, chainID } = useWeb3Context();
 
@@ -60,25 +63,23 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
     }
   }
 
-
   const handleOK = () => {
     setWalletInfo(true);
     const Wallet = ethers.Wallet;
     const wallet = Wallet.fromMnemonic(mnemonic);
     console.log(mnemonic, wallet.privateKey);
     savePrivateKey(wallet.privateKey);
-    setOpen(false);
+    setOpenConfirmDialog(false);
   }
 
   const ConfirmAlertDialog = () => {
     return (
       <div style={{ background: "#ff0 !important" }}>
         <Dialog
-          open={open}
-          onClose={() => { setOpen(false) }}
+          open={openConfirmDialog}
+          onClose={() => { setOpenConfirmDialog(false) }}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-
         >
           <div className="dialog">
             <div className="title">Create New Wallet</div>
@@ -86,12 +87,12 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
               Did you check mnemonic?
             </div>
             <div className="action-button">
-              <div style={{width: "100px"}}/>
-              <button className="ok" onClick={handleOK}>Create</button> 
-              <button className="cancel" onClick={e => setOpen(false)}>Cancel</button> 
+              <div style={{ width: "100px" }} />
+              <button className="ok" onClick={handleOK}>Create</button>
+              <button className="cancel" onClick={e => setOpenConfirmDialog(false)}>Cancel</button>
             </div>
           </div>
-          
+
         </Dialog>
       </div>
     );
@@ -155,7 +156,7 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
               variant="contained"
               color="primary"
               size="large"
-              onClick={setOpen}
+              onClick={setOpenConfirmDialog}
             >
               Confirm
             </Button>
@@ -164,6 +165,75 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
       </div>
     )
   }
+
+
+  const ImportWalletWindow = () => {
+
+    const handleImportMnemonicText = () => {
+      try {
+        const Wallet = ethers.Wallet;
+        const wallet = Wallet.fromMnemonic(importedMnemonic);
+        console.log(importedMnemonic, wallet);
+        savePrivateKey(wallet.privateKey);
+        setWalletInfo(true);
+      } catch (e) {
+        setMnemonicCheckText('Mnemonic is incorrect');
+      }
+    }
+
+    return (
+      <div className="content">
+        <div style={{ margin: "50px 50px 0px 50px" }}>
+          <span className="mkong-wallet">MKONG Wallet</span>
+          <hr style={{ borderColor: "white" }} />
+        </div>
+        <div className="mnemonic-window-container">
+          <div className="mnemonic-window">
+            <div style={{ width: "500px" }}>
+              {/* <Grid container spacing={2} alignItems="flex-end">
+                {
+                  tempArray.map(item => {
+                    return <MnemonicItem word={item} />
+                  })
+                }
+              </Grid> */}
+              <FormControl variant="outlined" color="primary" fullWidth>
+                <OutlinedInput
+                  type={"text"}
+                  id="standard-textarea"
+                  variant="standard"
+                  value={importedMnemonic}
+                  onChange={e => setImportedMnemonic(e.target.value)}
+                />
+              </FormControl>
+              <div style={{ marginTop: "10px" }}>{mnemonicCheckText}</div>
+            </div>
+          </div>
+          <div className="button-arrange-row">
+            <Button
+              id="wallet-button"
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={e => setWindowID(0)}
+            >
+              Go Back
+            </Button>
+            <Button
+              id="wallet-button"
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={handleImportMnemonicText}
+            >
+              Confirm
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
 
   const CreateWalletWindow = () => {
     return (
@@ -190,6 +260,7 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
                 variant="contained"
                 color="primary"
                 size="large"
+                onClick={e => setWindowID(2)}
               >
                 <img src={WalletSymbolImg} className="button-icon" /> Import Wallet
               </Button>
@@ -214,6 +285,7 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
 
   windowArray.push(<CreateWalletWindow />);
   windowArray.push(<CreateMnemonicWindow />);
+  windowArray.push(<ImportWalletWindow />);
 
   return (
     <div id="wallet-create-view">

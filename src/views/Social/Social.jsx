@@ -1,33 +1,27 @@
-import { useEffect, useState } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+// import { useEffect, useState } from "react";
+// import { QueryClient, QueryClientProvider } from "react-query";
 import { Paper, Grid, Typography, Box, Zoom, Container, useMediaQuery } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
-import { useSelector } from "react-redux";
-import { trim, formatCurrency } from "../../helpers";
+// import { Skeleton } from "@material-ui/lab";
+// import { useSelector } from "react-redux";
+// import { trim, formatCurrency } from "../../helpers";
 
-import { useTheme } from "@material-ui/core/styles";
+// import { useTheme } from "@material-ui/core/styles";
 import "./Social.scss";
 
 function Social() {
-  const [data, setData] = useState(null);
-  const [apy, setApy] = useState(null);
-  const [runway, setRunway] = useState(null);
-  // const [staked, setStaked] = useState(null);
-  const theme = useTheme();
+  // const [data, setData] = useState(null);
+  // const [apy, setApy] = useState(null);
+  // const [runway, setRunway] = useState(null);
+  // // const [staked, setStaked] = useState(null);
+  // const theme = useTheme();
   const smallerScreen = useMediaQuery("(max-width: 650px)");
   const verySmallScreen = useMediaQuery("(max-width: 379px)");
 
-  const stakingAPY = useSelector(state => {
-    return state.account.staking && state.account.staking.rewardRate;
-  })
-
-
-  const trimmedStakingAPY = trim(stakingAPY, 1);
-
-  useEffect(() => {
-  }, []);
+  // useEffect(() => {
+  // }, []);
   return (
-    <div id="social-view" className={`${smallerScreen && "smaller"} ${verySmallScreen && "very-small"}`}>
+    // <div id="social-view" className={`${smallerScreen && "smaller"} ${verySmallScreen && "very-small"}`}>
+    <div id="social-view">
       <Container
         style={{
           paddingLeft: smallerScreen || verySmallScreen ? "0" : "3.3rem",
