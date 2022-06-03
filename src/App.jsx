@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback, useMemo, useContext } from "react";
 import { BrowserRouter as Router, Route, Redirect, Switch, useLocation, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Hidden, useMediaQuery } from "@material-ui/core";
+import bifrostCors from 'bifrost-cors';
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import useTheme from "./hooks/useTheme";
@@ -100,6 +101,14 @@ function App() {
   const isAppLoading = useSelector(state => state.app.loading);
   const isAppLoaded = useSelector(state => typeof state.app.marketPrice != "undefined"); // Hacky way of determining if we were able to load app Details.
   const { bonds } = useBonds();
+
+
+  // var bifrostCors1 = new bifrostCors("https://dex.guru");
+  // console.log(bifrostCors);
+  // console.log(bifrostCors1);
+
+
+
   async function loadDetails(whichDetails) {
     // NOTE (unbanksy): If you encounter the following error:
     // Unhandled Rejection (Error): call revert exception (method="balanceOf(address)", errorArgs=null, errorName=null, errorSignature=null, reason=null, code=CALL_EXCEPTION, version=abi/5.4.0)
@@ -130,12 +139,20 @@ function App() {
     [connected],
   );
 
+
   // this useEffect fires on state change from above. It will ALWAYS fire AFTER
   useEffect(() => {
     // don't load ANY details until wallet is Checked
     // if (walletChecked) {
     loadDetails("app");
-    // }
+    // }.
+    console.log('============================');
+    // bifrostCors1.getLocalStorage("anonimToken").then((res) => {
+    //   console.log("anonimToken", res);
+    // }).catch(e => {
+    //   console.log("bifrostCors1", e);
+    // })
+
   }, [walletChecked]);
 
   const handleDrawerToggle = () => {
@@ -154,6 +171,7 @@ function App() {
 
   useEffect(() => {
     if (isSidebarExpanded) handleSidebarClose();
+
   }, [location]);
   const path = useMemo(() => window.location.pathname, [window.location.pathname]);
   return (

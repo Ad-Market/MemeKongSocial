@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Paper, Grid, Typography, Box, Zoom } from "@material-ui/core";
+import { BounceLetterLoaderOverlay, LineLoaderOverlay } from 'react-spinner-overlay'
 import { useWeb3Context } from "src/hooks/web3Context";
 import { abi as ierc20Abi } from "../../abi/IERC20.json";
 import { BigNumber, ethers } from "ethers";
@@ -14,6 +15,8 @@ import ReactPaginate from "react-paginate";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { error } from "../../slices/MessagesSlice";
 
+const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/eth/mainnet");
+const tokenContract = new ethers.Contract("0xeE6b9CF11D968E0bAc7BFfF547577B8AE35B8065", ierc20Abi, provider);
 
 const useStyles = makeStyles(theme => ({
   addAddressBtn: {
@@ -35,10 +38,15 @@ function HolderTable() {
   const [newAddress, setNewAddress] = useState("");
 
   const [holderData, setHolderData] = useState([]);
+  const [walletList, setWalletList] = useState([]);
   const [pageData, setPageData] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const classes = useStyles();
   const [tokenPrice, setTokenPrice] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [overlayText, setOverlayText] = useState('Wallet Info Loading...');
+  const [totalMkongAmount, setTotalMkongAmount] = useState(0);
+
   const isSmallScreen = useMediaQuery("(max-width: 705px)");
   const dispatch = useDispatch();
 
@@ -47,42 +55,68 @@ function HolderTable() {
     loadMarketPrice();
   }, []);
 
-  const loadData = (curPage) => {
-    axios.get("https://apimemekongsocial.acdevdash.com/read", { params: { page: curPage } }).then((response) => {
-      const localHolds = response.data.holders;
-      setHolderData(localHolds);
-      const currentPageData = localHolds.slice(0, PER_PAGE);
+  const loadData = async (curPage) => {
+    setLoading(true);
+    const walleListString = localStorage.getItem('wallet-list');
+    let tempList = JSON.parse(walleListString);
+
+    let _totalMkongAmount = 0;
+    if (tempList) {
+      const info = holderData;
+
+      for (let i = 0; i < tempList.length; i++) {
+        const address = tempList[i];
+        let mkongBalance = await tokenContract.balanceOf(address);
+        let mkongAmount = ethers.utils.formatUnits(mkongBalance, "gwei");
+        _totalMkongAmount += +mkongAmount;
+        const newHolder = { address: address, amount: mkongAmount };
+        info.push(newHolder);
+        setHolderData(info);
+      }
+      const currentPageData = info.slice(0, PER_PAGE);
       setPageData(currentPageData);
-    });
+    } else {
+      tempList = [];
+    }
+
+    setTotalMkongAmount(_totalMkongAmount);
+    setWalletList(tempList);
+    setLoading(false);
   }
 
-  const loadMarketPrice = async() =>{
-    try{
+  const loadMarketPrice = async () => {
+    try {
       const res = await axios.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=meme-kong&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C14d%2C30d", {
         headers: { "X-API-Key": "YEEwMh0B4VRg6Hu5gFQcKxqinJ7UizRza1JpbkyMgNTfj4jUkSaZVajOxLNabvnt" },
       });
-      
+
       let price = res.data[0].current_price;
       setTokenPrice(price);
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   };
 
   const addNewAddress = async () => {
 
-    const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/eth/mainnet");
-    const tokenContract = new ethers.Contract( "0xeE6b9CF11D968E0bAc7BFfF547577B8AE35B8065", ierc20Abi, provider );
+    if (walletList && walletList.length > 0) {
+      let isExist = walletList.find(address => address.toUpperCase() == newAddress.toUpperCase());
+      if (isExist) {
+        dispatch(error("This address alread exist"));
+        return;
+      }
+    }
+
+    setLoading(true);
+    setOverlayText('Adding new address');
+
     let mkongAmount = 0;
-    try{
+    try {
       let mkongBalance = await tokenContract.balanceOf(newAddress);
       mkongAmount = ethers.utils.formatUnits(mkongBalance, "gwei");
-    }catch(e){
+    } catch (e) {
       dispatch(error("incorrect address"));
-      return;
-    }
-    if (mkongAmount == 0){
-      dispatch(error("don't have balance"));
+      setLoading(false);
       return;
     }
 
@@ -92,26 +126,19 @@ function HolderTable() {
       amount: newHolder.amount,
     };
     const info = holderData;
-    if (info.length > 0) {
-      info.find((holder) => holder.address === newHolder.address)
-        ? alert("address already added!")
-        :
-        await axios.post("https://apimemekongsocial.acdevdash.com/addAddress", { userData }).catch(function (error) {
-          console.log(error);
-        });
-      info.push(userData);
-    }
-    else {
-      await axios.post("https://apimemekongsocial.acdevdash.com/addAddress", { userData }).catch(function (error) {
-        console.log(error);
-      });
-      info.push(userData);
-    }
+    info.push(userData);
 
-    setHolderData(...info);
-    let count = addCount + 1;
-    setAddCount(count);
-    loadData(1);
+    setHolderData(info);
+
+    // loadData(1);
+
+    let tempList = walletList;
+    tempList.push(newAddress);
+    setWalletList(tempList);
+    localStorage.setItem('wallet-list', JSON.stringify(tempList));
+
+    handlePageClick({ selected: currentPage });
+    setLoading(false);
   };
 
   const setAddressInputCallBack = (value) => {
@@ -137,8 +164,11 @@ function HolderTable() {
         </Typography>
       </div>
       <div>
+        <div style={{ marginBottom: "10px", display: "flex", justifyContent: "flex-end", color: "rgb(255, 69, 165)" }} >
+          Total Balance: {Number(totalMkongAmount).toFixed(0) + 'MKONG, $' + Number(totalMkongAmount * tokenPrice).toFixed(1)}
+        </div>
         <div style={{ marginBottom: "10px", display: "flex", justifyContent: "space-between" }} >
-          <TextField id="outlined-basic" label="new Address" variant="outlined"
+          <TextField id="outlined-basic" label="New address" variant="outlined"
             style={{ width: "100%" }}
             value={newAddress}
             onChange={e => setAddressInputCallBack(e.target.value)}
@@ -160,12 +190,12 @@ function HolderTable() {
           onPageChange={handlePageClick}
           containerClassName={"pagination"}
           subContainerClassName={"pages pagination"}
-          activeClassName={"active"}/>
+          activeClassName={"active"} />
         <div>
-        
+
         </div>
         <Table bordered style={{ background: "#ac1fc41a", color: "white" }} size="30sm">
-          <thead style={{ background: "#ac1fc430"}}>
+          <thead style={{ background: "#ac1fc430" }}>
             <tr>
               <th>Wallet Address</th>
               <th>Amount</th>
@@ -179,13 +209,13 @@ function HolderTable() {
                   return (
                     <tr>
                       <td>{
-                        isSmallScreen? holder.address.slice(0, 5) +
-                        "..." +
-                        holder.address.substring(
-                          holder.address.length - 3,
-                          holder.address.length
-                        ) : holder.address
-                        }
+                        isSmallScreen ? holder.address.slice(0, 5) +
+                          "..." +
+                          holder.address.substring(
+                            holder.address.length - 3,
+                            holder.address.length
+                          ) : holder.address
+                      }
                       </td>
                       <td>{Number(holder.amount).toFixed(3)}</td>
                       <td>{Number(holder.amount * tokenPrice).toFixed(1)} $</td>
@@ -196,6 +226,14 @@ function HolderTable() {
             )}
         </Table>
       </div>
+      <LineLoaderOverlay
+        loading={loading}
+        overlayColor="#000a"
+        color="#fff"
+        width={280}
+        animationDuration={3}
+        message={<div style={{ fontSize: "16px", marginTop: "10px" }}>{overlayText}...</div>}
+      />
     </Container>
   );
 }

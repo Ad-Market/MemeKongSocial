@@ -12,29 +12,19 @@ import './TokenActivity.scss';
 
 export default function TokenActivity({ name, history, address }) {
 
-  const [tokenInfo, setTokenInfo] = useState({});
-
-  const tokenList = useSelector(state => {
-    return state.account.balances && state.account.balances.tokenList;
-  });
-
   // useEffect(async () => {
   //   return getTokenInfo();
   // }, [address])
 
   const backColor = `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
-  const isReceived = address.toUpperCase() == history.to_address.toUpperCase();
+  const isReceived = address.toUpperCase() == history.to.toUpperCase();
 
   const getBalance = (balance, decimals) => {
     return Number(ethers.utils.formatUnits(balance, decimals));
   }
 
   const getTransferAmount = () => {
-    let token = tokenList.find(item => item.address == history.address);
-    console.log(token, history.value, token.decimals);
-    // return 'asdfas';
-
-    let transferAmount = getBalance(history.value, token.decimals) + ' ' + token.symbol;
+    let transferAmount = getBalance(history.value, history.tokenDecimal) + ' ' + history.tokenSymbol;
     return transferAmount;
   }
 
@@ -52,7 +42,7 @@ export default function TokenActivity({ name, history, address }) {
             {isReceived ? 'Received' : 'Sent'}
           </div>
           <div className="transaction-info">
-            {isReceived ? 'From:' + shorten(history.from_address) : 'To:' + shorten(history.to_address)}
+            {isReceived ? 'From:' + shorten(history.from) : 'To:' + shorten(history.to)}
           </div>
         </div>
       </div>

@@ -13,11 +13,13 @@ export default function () {
   const [privateKey, setPrivateKey] = useState('');
   const [network, setNetwork] = useState(0);
   const [isAppLoad] = useState(false);
+  const [savedPassword, setSavedPassword] = useState('');
 
   useEffect(() => {
     const _privateKey = localStorage.getItem("private_key");
     const _network = localStorage.getItem("network");
-
+    const _savedPassword = localStorage.getItem('password');
+    setSavedPassword(_savedPassword);
     if (_network != null) {
       setNetwork(_network);
     }
@@ -34,15 +36,19 @@ export default function () {
   const savePrivateKey = _privatekey => {
     setPrivateKey(_privatekey);
     localStorage.setItem("private_key", _privatekey);
+    const _savedPassword = localStorage.getItem('password');
+    setSavedPassword(_savedPassword);
   }
 
+  console.log(savedPassword, isWalletInfoLoad);
   return (
     <div style={{backgroundImage: 'url("'+WalletBackground+'")', backgroundSize: 'cover', backgroundPosition: 'center', width: "100%", height: "100%"}}>
       {
-        !isWalletInfoLoad ?
+        !isWalletInfoLoad || savedPassword == undefined ?
           <WalletCreate 
             setWalletInfo={setWalletInfo}
             savePrivateKey={savePrivateKey}
+            refreshPassword={setSavedPassword}
             /> :
           <WalletActivity privateKey={privateKey} network={network}/>
       }

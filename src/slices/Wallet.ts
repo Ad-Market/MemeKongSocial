@@ -22,13 +22,22 @@ export const transferToken = createAsyncThunk(
 
     let rpcURL = null;
 
-    if (network == 0)
-      rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/eth/rinkeby";
-    else if (network == 1)
-      rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet";
-    else if (network == 2)
-      rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/polygon/mumbai";
-
+    if (isTestnet) {
+      if (network == 0)
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/eth/rinkeby";
+      else if (network == 1)
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet";
+      else if (network == 2)
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/polygon/mumbai";
+    } else {
+      if (network == 0)
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/eth/mainnet";
+      else if (network == 1)
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/mainnet";
+      else if (network == 2)
+        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/polygon/mainnet";
+    }
+   
     const privateKey: string = localStorage.getItem("private_key") as string;
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
     const wallet = new ethers.Wallet(privateKey, provider);

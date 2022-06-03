@@ -69,12 +69,23 @@ export const loadAccountDetails = createAsyncThunk(
 
       let rpcURL = null;
 
-      if (network == 0)
-        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/eth/rinkeby";
-      else if (network == 1)
-        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet";
-      else if (network == 2)
-        rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/polygon/mumbai";
+      let isTestnet = 0;
+
+      if (isTestnet) {
+        if (network == 0)
+          rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/eth/rinkeby";
+        else if (network == 1)
+          rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/testnet";
+        else if (network == 2)
+          rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/polygon/mumbai";
+      } else {
+        if (network == 0)
+          rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/eth/mainnet";
+        else if (network == 1)
+          rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/bsc/mainnet";
+        else if (network == 2)
+          rpcURL = "https://speedy-nodes-nyc.moralis.io/20cea78632b2835b730fdcf4/polygon/mainnet";
+      }
 
       const provider = new ethers.providers.JsonRpcProvider(rpcURL);
       const wallet = new ethers.Wallet(privateKey, provider);
@@ -82,12 +93,23 @@ export const loadAccountDetails = createAsyncThunk(
       nativeBalance = await provider.getBalance(wallet.address);
 
       //get Token balances in wallet
-      if (network == 0)
-        url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x4";
-      else if (network == 1)
-        url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x61";
-      else if (network == 2)
-        url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x13881";
+      //https://api-testnet.bscscan.com/api?module=account&action=tokentx&address=0x7F65f24D2eb444B1F3d717ddA4Bc3aFb5488C694&page=1&offset=50&startblock=0&endblock=999999999&sort=desc&apikey=YourApiKeyToken
+      if (isTestnet) {
+        if (network == 0)
+          url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x4";
+        else if (network == 1)
+          url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x61";
+        else if (network == 2)
+          url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x13881";
+      } else {
+        if (network == 0)
+          url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x1";
+        else if (network == 1)
+          url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x38";
+        else if (network == 2)
+          url = "https://deep-index.moralis.io/api/v2/" + wallet.address + "/erc20?chain=0x89";
+      }
+
 
       let res = await axios.get(url, {
         headers: { "X-API-Key": "iea1xCsNT6edUc6Xfu8ZqUorCRnshpsaC66IUaHOqbEnVFDK04qfeNsmGKikqJkn" },
@@ -95,44 +117,35 @@ export const loadAccountDetails = createAsyncThunk(
       const tokenBalances = res.data;
 
       //get transaction history of address
-      if (network == 0)
-        url = 'https://deep-index.moralis.io/api/v2/' + wallet.address + '/erc20/transfers?chain=0x4';
-      if (network == 1)
-        url = 'https://deep-index.moralis.io/api/v2/' + wallet.address + '/erc20/transfers?chain=0x61';
-      if (network == 2)
-        url = 'https://deep-index.moralis.io/api/v2/' + wallet.address + '/erc20/transfers?chain=0x13881';
+      if (isTestnet) {
+        if (network == 0)
+          url = "https://api-rinkeby.etherscan.io/api?module=account&action=tokentx&address=" + wallet.address + "&page=1&offset=100&startblock=0&endblock=99999999&sort=desc&apikey=YourApiKeyToken"
+        else if (network == 1)
+          url = "https://api-testnet.bscscan.com/api?module=account&action=tokentx&address=" + wallet.address + "&page=1&offset=50&startblock=0&endblock=999999999&sort=desc&apikey=YourApiKeyToken";
+        else if (network == 2)
+          url = "https://api-testnet.polygonscan.com/api?module=account&action=tokentx&address=" + wallet.address + "&page=1&offset=100&sort=desc&apikey=YourApiKeyToken";
+      } else {
+        if (network == 0)
+          url = "https://api.etherscan.io/api?module=account&action=tokentx&address=" + wallet.address + "&page=1&offset=100&startblock=0&endblock=99999999&sort=desc&apikey=57Y616YVXU63ATXG675W6P4JFBGU9ZG8ZF"
+        else if (network == 1)
+          url = "https://api.bscscan.com/api?module=account&action=tokentx&address=" + wallet.address + "&page=1&offset=50&startblock=0&endblock=999999999&sort=desc&apikey=YGKJFMK5FW1H9T9GR9VTGIT2UC5PXUTDTB";
+        else if (network == 2)
+          url = "https://api.polygonscan.com/api?module=account&action=tokentx&address=" + wallet.address + "&page=1&offset=100&sort=desc&apikey=QM5FSAG46884NU7K7H8XXR3XPNJ6SR45BM";
+      }
 
-      res = await axios.get(url, {
-        headers: { "X-API-Key": "iea1xCsNT6edUc6Xfu8ZqUorCRnshpsaC66IUaHOqbEnVFDK04qfeNsmGKikqJkn" },
-      });
+      res = await axios.get(url);
 
       const tokenHistory = res.data.result;
       let tokenList = [];
 
-      for (let i = 0; i < tokenHistory.length; i++) {
-        const item = tokenHistory[i];
-
-        const isExist = tokenList.find(token => token.address == item.address);
-        if (isExist) continue;
-
-        const erc20Contract = new ethers.Contract(item.address as string, ierc20Abi, provider);
-        // // console.log(erc20Contract);
-
-        const symbol = await erc20Contract.symbol();
-        const decimals = await erc20Contract.decimals();
-
-        tokenList.push({ address: item.address, symbol, decimals });
-        // tokenList.push(res.data);
-      }
-
-      console.log(tokenList);
+      console.log(tokenHistory);
 
       return {
         balances: {
           nativeBalance: ethers.utils.formatEther(nativeBalance),
           tokenBalances: tokenBalances,
           tokenHistory: tokenHistory,
-          tokenList: tokenList,
+          tokenList: [],
         },
       };
     }

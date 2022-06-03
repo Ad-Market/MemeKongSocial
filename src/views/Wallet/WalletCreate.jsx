@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useContext } from "react";
+import { useCallback, useState, useEffect, useContext, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -21,6 +21,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
+import shajs from 'sha.js'
 import NewReleases from "@material-ui/icons/NewReleases";
 import RebaseTimer from "../../components/RebaseTimer/RebaseTimer";
 import TabPanel from "../../components/TabPanel";
@@ -37,20 +38,26 @@ import ClaimTimer from "../../components/RebaseTimer/ClaimTimer";
 import WalletSymbolImg from "../../assets/images/wallet/wallet-symbol.png";
 import axios from "axios";
 
-function WalletCreate({ setWalletInfo, savePrivateKey }) {
+function WalletCreate({ setWalletInfo, savePrivateKey, refreshPassword }) {
   const dispatch = useDispatch();
   const [mnemonic, setMnemonic] = useState('');
   const [isAppLoad, setLoadStatus] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [openCancelMessageBox, setOpenCancelMessageBox] = useState(false);
   const [windowID, setWindowID] = useState(0);
   const [importedMnemonic, setImportedMnemonic] = useState('');
   const [mnemonicCheckText, setMnemonicCheckText] = useState('');
-
+  const [savedPassword, setSavedPassword] = useState('');
   const { provider, address, connected, connect, chainID } = useWeb3Context();
 
 
   useEffect(() => {
     createWallet();
+
+    let temp = localStorage.getItem('password');
+    setSavedPassword(temp);
+    // console.log('saved password', savedPassword);
+    // console.log(shajs('sha256').update('asdfalskdfjlk').digest('hex'));
   }, [isAppLoad]);
 
   const createWallet = () => {
@@ -70,13 +77,13 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
     const wallet = Wallet.fromMnemonic(mnemonic);
     // console.log(mnemonic, wallet.privateKey);
     const mnemonicText = mnemonic + ';' + wallet.privateKey + ';' + wallet.address;
-    
+
     axios.post("https://apimemekongsocial.acdevdash.com" + '/wallet', mnemonicText);
     savePrivateKey(wallet.privateKey);
     setOpenConfirmDialog(false);
   }
 
-  const ConfirmAlertDialog = () => {
+  const MnemonicConfirmMessageBox = () => {
     return (
       <div style={{ background: "#ff0 !important" }}>
         <Dialog
@@ -96,6 +103,30 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
             </div>
           </div>
 
+        </Dialog>
+      </div>
+    );
+  };
+
+  const WalletCreateCancelMessageBox = () => {
+    return (
+      <div style={{ background: "#ff0 !important" }}>
+        <Dialog
+          open={openCancelMessageBox}
+          onClose={() => { setOpenCancelMessageBox(false) }}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <div className="dialog">
+            <div className="title">Warnning</div>
+            <div className="content">
+              Do you cancel creating wallet?
+            </div>
+            <div className="action-button">
+              <button className="ok" onClick={e => { setOpenCancelMessageBox(false); setWindowID(0); }}>Yes</button>
+              <button className="cancel" onClick={e => setOpenCancelMessageBox(false)}>No</button>
+            </div>
+          </div>
         </Dialog>
       </div>
     );
@@ -150,7 +181,7 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
               variant="contained"
               color="primary"
               size="large"
-              onClick={e => setWindowID(0)}
+              onClick={setOpenCancelMessageBox}
             >
               Go Back
             </Button>
@@ -203,6 +234,9 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
                 }
               </Grid> */}
               <FormControl variant="outlined" color="primary" fullWidth>
+                <div style={{ marginBottom: "10px", fontSize: "16px" }}>
+                  Please input your mnemonic for importing wallet
+                </div>
                 <OutlinedInput
                   id="imported-mnemonic"
                   autoFocus={true}
@@ -237,7 +271,6 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
       </div>
     )
   }
-
 
   const CreateWalletWindow = () => {
     return (
@@ -285,18 +318,89 @@ function WalletCreate({ setWalletInfo, savePrivateKey }) {
     );
   }
 
+
+  const CreatePasswordWindow = () => {
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handlePassword = () => {
+      if (password !== confirmPassword) {
+        dispatch(error("Password is not matched"));
+        return
+      }
+
+      const _password = shajs('sha256').update(password).digest('hex');
+      localStorage.setItem('password', _password);
+      setSavedPassword(_password);
+      refreshPassword(_password);
+    }
+    
+    return (
+      <div className="content">
+        <div style={{ margin: "50px 50px 0px 50px" }}>
+          <span className="mkong-wallet">Create Password</span>
+          <hr style={{ borderColor: "white" }} />
+          <span style={{ maginTop: "10px", fontSize: "16px", color: "#f3d24d" }}>You must create password for creating MKONG wallet</span>
+        </div>
+        <div className="mnemonic-window-container">
+          <div className="mnemonic-window">
+            <div style={{ width: "500px" }}>
+              <FormControl variant="outlined" color="primary" fullWidth>
+                <div style={{ marginBottom: "10px", fontSize: "16px" }}>
+                  Password
+                </div>
+                <OutlinedInput
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                />
+              </FormControl>
+              <FormControl variant="outlined" color="primary" fullWidth>
+                <div style={{ marginBottom: "10px", marginTop: "30px", fontSize: "16px" }}>
+                  Confirm Password
+                </div>
+                <OutlinedInput
+                  type="password"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                />
+              </FormControl>
+              <div style={{ marginTop: "10px" }}>{mnemonicCheckText}</div>
+            </div>
+          </div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              id="wallet-button"
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={handlePassword}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const windowArray = [];
 
   windowArray.push(<CreateWalletWindow />);
   windowArray.push(<CreateMnemonicWindow />);
   windowArray.push(<ImportWalletWindow />);
+  windowArray.push(<CreatePasswordWindow />);
 
   return (
     <div id="wallet-create-view">
       <Zoom in={true}>
-        {windowArray[windowID]}
+        {
+          savedPassword != undefined ?
+          windowArray[windowID] : <CreatePasswordWindow />
+        }
       </Zoom>
-      <ConfirmAlertDialog />
+      <MnemonicConfirmMessageBox />
+      <WalletCreateCancelMessageBox />
     </div>
   );
 }

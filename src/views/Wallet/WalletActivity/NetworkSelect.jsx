@@ -25,7 +25,7 @@ export default function NetworkSelect({onChange, value}) {
       value={value}
       onChange={e => onChange(e.target.value)}
       labelWidth={0}
-      style={{ border: "2px !important", width: "200px" }}
+      style={{ border: "2px !important", width: "150px" }}
     >
       <div className="menu-item-caption">
         Network Select
@@ -33,19 +33,19 @@ export default function NetworkSelect({onChange, value}) {
       <MenuItem value={0}>
         <div className="menu-item">
           <img src={ethereum} width="35px" height="35px" className="network-icon" />
-          <span>Etherum Mainnet</span>
+          <span>Ethereum</span>
         </div>
       </MenuItem>
       <MenuItem value={1}>
         <div className="menu-item">
           <img src={binance} width="35px" height="35px" className="network-icon" />
-          <span>Biance Testnet</span>
+          <span>Biance</span>
         </div>
       </MenuItem>
       <MenuItem value={2}>
         <div className="menu-item">
           <img src={polygon} width="35px" height="35px" className="network-icon" />
-          <span>Polygon Mainnet</span>
+          <span>Polygon</span>
         </div>
       </MenuItem>
     </Select>
