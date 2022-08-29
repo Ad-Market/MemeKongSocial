@@ -1,5 +1,5 @@
 // export { default as Home } from "./Home/Home";
-export { default as home } from ".Home/Wallet";
+export { default as home } from "./Wallet";
 
 // export { default as Home } from "./Home/Home";
 // export { default as Wallet } from "./Wallet";
